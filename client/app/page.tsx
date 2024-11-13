@@ -1,5 +1,7 @@
 "use client"
 import React, {useEffect, useState} from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 // TODO This is just example, please remove "use client" later on
 
