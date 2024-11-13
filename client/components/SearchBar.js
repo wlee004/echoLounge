@@ -12,7 +12,6 @@ const SearchBar = () => {
 
   const handleSubmit = (event) => {
     setFinalInput(searchInput)
-    console.log(`finalInput: ${finalInput} ${searchInput}`)
     event.preventDefault();
   };
 
