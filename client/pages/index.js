@@ -2,11 +2,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-// Components 
-import SearchBar from '../components/searchbar'
-import YoutubePlayer from '../components/YoutubePlayer'
-
 export default function Home() {
+
+  const googleAuth = () => { 
+    const google_auth_link = process.env.REACT_APP_GOOGLE_AUTH_URL
+    console.log(google_auth_link)
+    window.location.href = `${process.env.REACT_APP_GOOGLE_AUTH_URL}`;
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -16,17 +18,9 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <header>
-          <nav className= "navbar bg-body-tertiary" data-bs-theme="dark">
-            <div className="container-fluid">
-              <span className="navbar-brand mb-0 h1">Echo Lounge</span>
-            </div>
-          </nav>
-        </header>
-        <SearchBar/>
-        {/* <YoutubePlayer/> */}
+        <h1>Welcome to Echo Lounge</h1>
+        <button onClick={googleAuth}>Try Me</button>
       </main>
-
     </div>
   )
 }
