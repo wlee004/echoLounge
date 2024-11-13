@@ -24,7 +24,7 @@ export default function Home() {
           </nav>
         </header>
         <SearchBar/>
-        <YoutubePlayer/>
+        {/* <YoutubePlayer/> */}
       </main>
 
     </div>
