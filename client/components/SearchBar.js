@@ -9,7 +9,7 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query);
+    console.log('Form submitted with input:', query);
   };
 
   return (
