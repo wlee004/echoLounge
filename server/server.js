@@ -3,12 +3,12 @@ const cors = require("cors")
 const app = express()
 const PORT = 8080 
 
+// Route Imports
+const userRoute = require("./routes/User")
+
 app.use(cors())
 
-// Sample GET request
-app.get("/", (req, res) => { 
-    res.json({message: "HELLO WORLD"})
-})
+app.use("/user", userRoute)
 
 app.listen(PORT, () => { 
     console.log(`Server started on port ${PORT}`)
