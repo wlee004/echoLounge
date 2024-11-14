@@ -3,12 +3,10 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
-
-  const googleAuth = () => { 
-    const google_auth_link = process.env.REACT_APP_GOOGLE_AUTH_URL
-    console.log(google_auth_link)
-    window.location.href = `${process.env.REACT_APP_GOOGLE_AUTH_URL}`;
+  const googleAuth = async () => { 
+    window.location.href="http://localhost:8080/api/auth/google/authenticate"
   }
+
   return (
     <div className={styles.container}>
       <Head>
