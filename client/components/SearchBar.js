@@ -3,17 +3,31 @@ import YoutubePlayer from './YoutubePlayer.js'
 
 const SearchBar = () => {
   const [searchInput, setSearchInput] = useState('');
-  // const [finalInput, setFinalInput] = useState('2g811Eo7K8U')
   const [finalInput, setFinalInput] = useState('https://www.youtube.com/watch?v=0H69m7TWB6E')
 
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    setFinalInput(searchInput)
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  };
+    // Make the API request to the backend
+    fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`)
+      .then(
+        response => response.json()
+      )
+      .then(
+        data => {
+          // setFinalInput(data.url); 
+          // TODO Update with above once endpoint works
+          setFinalInput(searchInput)
+          console.log(data)
+        }
+      )
+      .catch((error) => { 
+        console.error(`Error with Youtube Request: ${error}`)
+      })
+  }
 
   return (
     <div>
@@ -31,7 +45,6 @@ const SearchBar = () => {
       </form>
       <YoutubePlayer input={finalInput}/>
     </div>
-
   );
 };
 
