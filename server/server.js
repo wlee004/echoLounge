@@ -13,7 +13,10 @@ const userRoute = require("./routes/User")
 const youtubeRoute = require("./routes/Youtube")
 const googleAuthRoute = require("./routes/GoogleAuth")
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000', // Replace with your React app's URL
+    credentials: true               // Allow credentials (cookies)
+}))
 app.use(express.json())
 
 app.use("/api/user", userRoute)

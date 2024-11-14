@@ -12,16 +12,20 @@ const SearchBar = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Make the API request to the backend
-    fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`)
+    fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
+        method: 'GET',
+        credentials: 'include'  // Ensure cookies are included in the request
+      })
       .then(
         response => response.json()
       )
       .then(
-        data => {
+        data => { 
           // setFinalInput(data.url); 
           // TODO Update with above once endpoint works
-          setFinalInput(searchInput)
-          console.log(data)
+          const videoId = data.videoId
+          console.log("VIDEO ID DATA NEW: ", videoId)
+          setFinalInput(videoId)
         }
       )
       .catch((error) => { 

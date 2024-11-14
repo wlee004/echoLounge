@@ -13,7 +13,7 @@ const getVideos = async (req, res) => {
     if (!query) {
         return res.status(404).json({ message: 'Video Not Found, Query parameter is required' })
     }
-
+    console.log("COOKIE: ", access_token)
     axios.get(`${YOUTUBE_API_URL}?q=${query}&type=video&key=${API_KEY}`, {
         headers: {
             Authorization: `Bearer ${access_token}`
