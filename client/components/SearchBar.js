@@ -10,9 +10,28 @@ const SearchBar = () => {
     setSearchInput(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    setFinalInput(searchInput)
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    try {
+      // Make the API request to the backend
+      const response = await fetch('http://localhost:8080/api/youtube/getLink', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({ searchTerm: searchInput }), 
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFinalInput(data.url); 
+      } else {
+        console.error('Failed to fetch data');
+      }
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
   };
 
   return (
@@ -31,7 +50,6 @@ const SearchBar = () => {
       </form>
       <YoutubePlayer input={finalInput}/>
     </div>
-
   );
 };
 
