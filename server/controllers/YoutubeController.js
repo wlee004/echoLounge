@@ -7,9 +7,9 @@ const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY
 const token = "ABC123"
 
 const getVideos = async (req, res) => { 
-    const { query } = req.body
+    const query = req.params.input.replace(/\s+/g, '')
     if (!query) {
-        return res.status(400).json({ error: 'Query parameter is required' })
+        return res.status(404).json({ message: 'Video Not Found, Query parameter is required' })
     }
     
     const config = {
@@ -38,7 +38,6 @@ const getVideos = async (req, res) => {
                 console.log("Unauthorized")
                 res.status(401).json({ message: `Youtube API ${error.message}` })
             } 
-            res.status(500).json({ message: `${error.message}` })
         })
 }
 
