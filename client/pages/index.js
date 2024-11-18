@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  
   const googleAuth = async () => { 
     window.location.href="http://localhost:8080/api/auth/google/authenticate"
   }
