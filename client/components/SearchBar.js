@@ -15,6 +15,7 @@ const SearchBar = () => {
       // User Submit Youtube link
       if(searchInput.split("v=").length > 1){ 
         const videoId = searchInput.split("v=")[1].split("&")[0]
+        console.log("HERE: ", videoId)
         setFinalInput(videoId)
         setSearchInput("")
       } else { 
