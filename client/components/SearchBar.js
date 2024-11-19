@@ -10,9 +10,21 @@ const SearchBar = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    // Make the API request to the backend
-    fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
+    event.preventDefault()
+    if (searchInput.includes("https://www.youtube.com/")) {
+      // User Submit Youtube link
+      if(searchInput.split("v=").length > 1){ 
+        const videoId = searchInput.split("v=")[1].split("&")[0]
+        console.log("HERE: ", videoId)
+        setFinalInput(videoId)
+        setSearchInput("")
+      } else { 
+        // TODO Render an error message to client
+        console.error(`Error with Youtube Request: ${error}`)
+      }
+    } else { 
+      // Make the API request to the backend
+      fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
         method: 'GET',
         credentials: 'include'  // Ensure cookies are included in the request
       })
@@ -21,16 +33,18 @@ const SearchBar = () => {
       )
       .then(
         data => { 
-          // setFinalInput(data.url); 
-          // TODO Update with above once endpoint works
           const videoId = data.videoId
           console.log("VIDEO ID DATA NEW: ", videoId)
           setFinalInput(videoId)
+          setSearchInput("")
         }
       )
       .catch((error) => { 
         console.error(`Error with Youtube Request: ${error}`)
       })
+    }
+
+    
   }
 
   return (
