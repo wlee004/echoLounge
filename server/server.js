@@ -36,24 +36,24 @@ app.use("/api/youtube",youtubeRoute)
 app.use("/api/auth/google", googleAuthRoute)
 
 //client connect
-// io.on('connection', (socket) => {
-//     console.log('a user connected on ', socket.id)
+io.on('connection', (socket) => {
+    console.log('a user connected on ', socket.id)
 
-//     //client messages
-//     socket.on('message', (data) => {
-//         console.log(`Message from ${socket.id}:`, data)
+    //client messages
+    socket.on('message', (data) => {
+        console.log(`Message from ${socket.id}:`, data)
     
-//         // Broadcast the message to all connected clients
-//         io.emit('message', { sender: socket.id, message: data })
-//       })
+        // Broadcast the message to all connected clients
+        io.emit('message', { sender: socket.id, message: data })
+      })
 
-//     //cleint disconnect
-//     socket.on('disconnect', () => {
-//     console.log('User disconnected:', socket.id);
-//     })
+    //cleint disconnect
+    socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+    })
 
-//   })
+  })
   
-app.listen(PORT, () => { 
+httpServer.listen(PORT, () => { 
     console.log(`Server started on port ${PORT}`)
 })

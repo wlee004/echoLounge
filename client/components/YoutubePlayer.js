@@ -13,6 +13,7 @@ const YoutubePlayer = (props) => {
         height: '390',
         width: '640',
         playerVars: {
+          enablejsapi: 1,
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
         },
