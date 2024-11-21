@@ -10,7 +10,7 @@ const PORT = 8080
 const app = express()
 app.use(cookieParser())
 app.use(cors({
-    origin: '*', // Replace with your React app's URL
+    origin: 'http://localhost:3000', // Replace with your React app's URL
     credentials: true               // Allow credentials (cookies)
 }))
 app.use(express.json())
@@ -19,7 +19,7 @@ app.use(express.json())
 const server = http.createServer(app)
 const io = new Server(server, { 
     cors: { 
-        origin: '*', // Replace with your React app's URL
+        origin: 'http://localhost:3000', // Replace with your React app's URL
         credentials: true               // Allow credentials (cookies)
     }
 })
@@ -32,6 +32,10 @@ const googleAuthRoute = require("./routes/GoogleAuth")
 // Socket IO 
 io.on('connection', (socket) => { 
     console.log(`User Connected ${socket.id}`)
+
+    socket.on("send_message", (data) => { 
+        socket.broadcast.emit("receive_message", data)
+    })
 })
 
 // Routes

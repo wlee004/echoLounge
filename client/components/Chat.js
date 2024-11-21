@@ -1,26 +1,55 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import io from "socket.io-client"
 
-const socket = io.connect("http://localhost:8080")
+const socket = io.connect("http://localhost:8080/")
 
 const Chat = () => {
+    const [message, setMessage] = useState("")
+    const [messageReceieved, setMessageReceived] = useState("")
+
     const sendMessage = () => { 
-        socket.emit()
+        socket.emit("send_message", {"message": message})
+    }
+
+    useEffect(() => { 
+        socket.on("receive_message", (data) => { 
+            setMessageReceived(data.message)
+        })
+    }, [socket])
+
+    const handleInputChange = (event) => { 
+        setMessage(event.target.value)
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        sendMessage()
+        setMessage("")
     }
 
     return (
         <div>
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
-                    <li className="message mb-2 p-2 bg-light rounded-3">Hello! How are you?</li>
-                    <li className="message mb-2 p-2 bg-secondary text-white rounded-3">I'm good, thanks for asking!</li>
+                    <li className="message mb-2 p-2 bg-light rounded-3">{messageReceieved}</li>
+                    {/* <li className="message mb-2 p-2 bg-secondary text-white rounded-3">{messageReceieved}</li> */}
                 </ul>
             </div>
 
-            <div className="input-area d-flex w-100">
-                <input type="text" id="chat-input" className="form-control me-2" placeholder="Type your message here..." aria-label="Message"/>
-                <button className="btn btn-primary" onClick={sendMessage}>Send</button>
-            </div>
+            <form onSubmit={handleSubmit} className="d-flex mb-3">
+                    <input
+                        type="text"
+                        className="form-control me-2"
+                        placeholder="Send Message"
+                        value={message}
+                        onChange={handleInputChange}
+                    />
+                    <button type="submit" className="btn btn-primary">
+                        Send
+                    </button>
+            </form>
+
+ 
         </div>
     )
 }
