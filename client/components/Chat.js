@@ -5,15 +5,13 @@ const socket = io.connect("http://localhost:8080/")
 
 const Chat = () => {
     const [message, setMessage] = useState("")
-    const [messageReceieved, setMessageReceived] = useState("")
+    const [messageLogs, setMessageLogs] = useState([])
 
-    const sendMessage = () => { 
-        socket.emit("send_message", {"message": message})
-    }
 
     useEffect(() => { 
-        socket.on("receive_message", (data) => { 
-            setMessageReceived(data.message)
+        socket.on("receive_message", (newMessage) => {
+            console.log("data: ", newMessage)
+            setMessageLogs((previousMessages) => [...previousMessages, newMessage])
         })
     }, [socket])
 
@@ -21,9 +19,10 @@ const Chat = () => {
         setMessage(event.target.value)
     }
 
-    const handleSubmit = async (event) => {
+    const sendMessage = async (event) => {
         event.preventDefault()
-        sendMessage()
+        setMessageLogs((previousMessages) => [...previousMessages, message])
+        socket.emit("send_message", message)
         setMessage("")
     }
 
@@ -31,12 +30,15 @@ const Chat = () => {
         <div>
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
-                    <li className="message mb-2 p-2 bg-light rounded-3">{messageReceieved}</li>
+                    {messageLogs.map((msg, index) => {
+                            return <li key={index} className="message mb-2 p-2 bg-light rounded-3">{msg}</li>
+                    })}
+                    {/* <li className="message mb-2 p-2 bg-light rounded-3">{messageReceieved}</li> */}
                     {/* <li className="message mb-2 p-2 bg-secondary text-white rounded-3">{messageReceieved}</li> */}
                 </ul>
             </div>
 
-            <form onSubmit={handleSubmit} className="d-flex mb-3">
+            <form onSubmit={sendMessage} className="d-flex mb-3">
                     <input
                         type="text"
                         className="form-control me-2"
@@ -48,8 +50,6 @@ const Chat = () => {
                         Send
                     </button>
             </form>
-
- 
         </div>
     )
 }
