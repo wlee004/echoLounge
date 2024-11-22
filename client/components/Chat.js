@@ -1,24 +1,26 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { SocketContext } from '../pages/socket'
+import { useSocket } from '../pages/socketProvider'
 
 const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
-    const socket = useContext(SocketContext)
+    const { socket, socketConnected } = useSocket()
 
     useEffect(() => { 
-        const appendMessageLogs = (newMessage) => { 
-            setMessageLogs((previousMessages) => [...previousMessages, newMessage])
+        if (socketConnected) { 
+            const appendMessageLogs = (newMessage) => { 
+                setMessageLogs((previousMessages) => [...previousMessages, newMessage])
+            }
+    
+            socket.on("receive_message", appendMessageLogs)
         }
-
-        socket.on("receive_message", appendMessageLogs)
-
-        return () => { 
-            // before the component is destroyed
-            // unbind all event handlers used in this component
-            socket.off("receive_message", appendMessageLogs)
-        }
-    }, [socket])
+        // TODO FIX CODE BELOW
+        // return () => { 
+        //     // before the component is destroyed
+        //     // unbind all event handlers used in this component
+        //     socket.off("receive_message", appendMessageLogs)
+        // }
+    }, [socket, socketConnected])
 
     const handleInputChange = (event) => { 
         setMessage(event.target.value)

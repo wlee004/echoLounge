@@ -40,6 +40,10 @@ const chatHandler = require("./socketHandler/ChatHandler")
 io.on('connection', (socket) => { 
     console.log(`User Connected ${socket.id}`)
 
+    socket.on('disconnect', () => { 
+        console.log(`User disconnected ${socket.id}`)
+    })
+
     chatHandler(io, socket)
 })
 

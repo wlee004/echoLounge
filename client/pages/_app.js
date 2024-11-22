@@ -1,12 +1,12 @@
 import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { SocketContext, socket } from './socket'
+import { SocketProvider } from './socketProvider'
 
 function MyApp({ Component, pageProps }) {
     return (
-        <SocketContext.Provider value={socket}>
+        <SocketProvider>
             <Component {...pageProps} />
-        </SocketContext.Provider>
+        </SocketProvider>
     )
 }
 
