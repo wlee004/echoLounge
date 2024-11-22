@@ -28,7 +28,7 @@ exports.oauth2_get = (req, res) => {
     // Generate a secure random state value.
     const state = crypto.randomBytes(32).toString('hex')
 
-    //TODO FIX Session state
+    // TODO FIX Session state
     // Store state in the session
     // req.session.state = state
     
