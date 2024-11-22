@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import io from "socket.io-client"
-
-const socket = io.connect("http://localhost:8080/")
+import React, { useEffect, useState, useContext } from 'react'
+import { SocketContext } from '../pages/socket'
 
 const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    const socket = useContext(SocketContext)
 
     useEffect(() => { 
-        socket.on("receive_message", (newMessage) => {
+        const appendMessageLogs = (newMessage) => { 
             setMessageLogs((previousMessages) => [...previousMessages, newMessage])
-        })
+        }
+
+        socket.on("receive_message", appendMessageLogs)
+
+        return () => { 
+            // before the component is destroyed
+            // unbind all event handlers used in this component
+            socket.off("receive_message", appendMessageLogs)
+        }
     }, [socket])
 
     const handleInputChange = (event) => { 
