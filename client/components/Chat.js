@@ -7,10 +7,8 @@ const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
 
-
     useEffect(() => { 
         socket.on("receive_message", (newMessage) => {
-            console.log("data: ", newMessage)
             setMessageLogs((previousMessages) => [...previousMessages, newMessage])
         })
     }, [socket])
@@ -21,9 +19,11 @@ const Chat = () => {
 
     const sendMessage = async (event) => {
         event.preventDefault()
-        setMessageLogs((previousMessages) => [...previousMessages, message])
-        socket.emit("send_message", message)
-        setMessage("")
+        if (message !== "") { 
+            setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
+            socket.emit("send_message", message)
+            setMessage("")
+        }
     }
 
     return (
@@ -31,7 +31,7 @@ const Chat = () => {
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
                     {messageLogs.map((msg, index) => {
-                            return <li key={index} className="message mb-2 p-2 bg-light rounded-3">{msg}</li>
+                            return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
                     })}
                     {/* <li className="message mb-2 p-2 bg-light rounded-3">{messageReceieved}</li> */}
                     {/* <li className="message mb-2 p-2 bg-secondary text-white rounded-3">{messageReceieved}</li> */}
