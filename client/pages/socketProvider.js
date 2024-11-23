@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from "react"
 import { io } from "socket.io-client"
 
-// Create and export the socket instance
-// const socket = io("http://localhost:8080/")
+// Create context for socket to be shared
 const SocketContext = React.createContext()
 
 const SocketProvider = ({children}) => {
-    // const socket = io("http://localhost:8080")
     const [socket, setSocket] = useState(null)
     const [socketConnected, setSocketConnected] = useState(false)
     
@@ -16,11 +14,11 @@ const SocketProvider = ({children}) => {
    
         socketInstance.on('connect', () => {
             setSocketConnected(true) 
-        });
+        })
       
         socketInstance.on('disconnect', () => {
             setSocketConnected(false)  
-        });
+        })
         
         return () => { 
             socketInstance.disconnect() // Clean up on unmount
