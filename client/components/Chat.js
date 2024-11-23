@@ -12,13 +12,13 @@ const Chat = () => {
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
             }
     
-            socket.on("receive_message", appendMessageLogs)
+            socket.on("chat:receive_message", appendMessageLogs)
         }
         // TODO FIX CODE BELOW
         // return () => { 
         //     // before the component is destroyed
         //     // unbind all event handlers used in this component
-        //     socket.off("receive_message", appendMessageLogs)
+        //     socket.off("chat:receive_message", appendMessageLogs)
         // }
     }, [socket, socketConnected])
 
@@ -30,7 +30,7 @@ const Chat = () => {
         event.preventDefault()
         if (message !== "") { 
             setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
-            socket.emit("send_message", message)
+            socket.emit("chat:send_message", message)
             setMessage("")
         }
     }
