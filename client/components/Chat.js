@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import io from "socket.io-client"
-
-const socket = io.connect("http://localhost:8080/")
+import React, { useEffect, useState, useContext } from 'react'
+import { useSocket } from '../pages/socketProvider'
 
 const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    const { socket, socketConnected } = useSocket()
 
     useEffect(() => { 
-        socket.on("receive_message", (newMessage) => {
-            setMessageLogs((previousMessages) => [...previousMessages, newMessage])
-        })
-    }, [socket])
+        if (socketConnected) { 
+            const appendMessageLogs = (newMessage) => { 
+                setMessageLogs((previousMessages) => [...previousMessages, newMessage])
+            }
+    
+            socket.on("chat:receive_message", appendMessageLogs)
+        }
+        // TODO FIX CODE BELOW
+        // return () => { 
+        //     // before the component is destroyed
+        //     // unbind all event handlers used in this component
+        //     socket.off("chat:receive_message", appendMessageLogs)
+        // }
+    }, [socket, socketConnected])
 
     const handleInputChange = (event) => { 
         setMessage(event.target.value)
@@ -21,7 +30,7 @@ const Chat = () => {
         event.preventDefault()
         if (message !== "") { 
             setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
-            socket.emit("send_message", message)
+            socket.emit("chat:send_message", message)
             setMessage("")
         }
     }

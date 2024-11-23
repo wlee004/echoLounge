@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import YoutubePlayer from "./YoutubePlayer.js";
-import Chat from "./Chat.js";
+import React, { useState } from "react"
+import YoutubePlayer from "./YoutubePlayer.js"
+import Chat from "./Chat.js"
 
 const SearchBar = () => {
-    const [searchInput, setSearchInput] = useState("");
+    const [searchInput, setSearchInput] = useState("")
     const [finalInput, setFinalInput] = useState(
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
-    );
+    )
 
     const handleInputChange = (event) => {
-        setSearchInput(event.target.value);
+        setSearchInput(event.target.value)
     };
 
     const handleSubmit = async (event) => {
@@ -17,16 +17,16 @@ const SearchBar = () => {
         if (searchInput.includes("https://www.youtube.com/")) {
         // User Submit Youtube link
                 if (searchInput.split("v=").length > 1) {
-                const videoId = searchInput.split("v=")[1].split("&")[0];
-                console.log("HERE: ", videoId);
-                setFinalInput(videoId);
-                setSearchInput("");
+                const videoId = searchInput.split("v=")[1].split("&")[0]
+                console.log("HERE: ", videoId)
+                setFinalInput(videoId)
+                setSearchInput("")
             } else {
                 // TODO Render an error message to client
-                console.error(`Error with Youtube Request: ${error}`);
+                console.error(`Error with Youtube Request: ${error}`)
             }
         } else {
-        // Make the API request to the backend
+            // Make the API request to the backend
             fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
                 method: "GET",
                 credentials: "include", // Ensure cookies are included in the request
@@ -34,12 +34,12 @@ const SearchBar = () => {
             .then((response) => response.json())
             .then((data) => {
                 const videoId = data.videoId;
-                console.log("VIDEO ID DATA NEW: ", videoId);
-                setFinalInput(videoId);
-                setSearchInput("");
+                console.log("VIDEO ID DATA NEW: ", videoId)
+                setFinalInput(videoId)
+                setSearchInput("")
             })
             .catch((error) => {
-                console.error(`Error with Youtube Request: ${error}`);
+                console.error(`Error with Youtube Request: ${error}`)
             })
         }
     }
@@ -62,7 +62,7 @@ const SearchBar = () => {
                 <YoutubePlayer input={finalInput} />
                 <Chat />
             </div>
-            </div>
+        </div>
         )
 }
 
