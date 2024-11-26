@@ -4,20 +4,23 @@ import { useSocket } from '../pages/socketProvider'
 const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    const [roomId, setRoomId] = useState("")
     const { socket, socketConnected } = useSocket()
-
+    
     useEffect(() => { 
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
+                console.log(newMessage)
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
             }
-    
+
+            const currRoomId = window.location.href.split("lounge/")[1]
+            setRoomId(currRoomId)
+            socket.emit("room:joinRoom" , currRoomId)
+
             socket.on("chat:receive_message", appendMessageLogs)
         }
-        // TODO FIX CODE BELOW
-        // return () => { 
-        //     // before the component is destroyed
-        //     // unbind all event handlers used in this component
+        // return () => {
         //     socket.off("chat:receive_message", appendMessageLogs)
         // }
     }, [socket, socketConnected])
@@ -30,7 +33,7 @@ const Chat = () => {
         event.preventDefault()
         if (message !== "") { 
             setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
-            socket.emit("chat:send_message", message)
+            socket.emit("chat:send_message", { message , roomId } )
             setMessage("")
         }
     }
