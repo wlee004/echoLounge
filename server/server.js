@@ -36,6 +36,7 @@ const io = new Server(server, {
 // Socket Handler Imports
 const chatHandler = require("./socketHandler/ChatHandler")
 const roomHandler = require("./socketHandler/RoomHandler")
+const youtubeHandler = require("./socketHandler/YoutubeHandler")
 
 // Handle Socket Connections
 io.on('connection', (socket) => { 
@@ -47,6 +48,7 @@ io.on('connection', (socket) => {
 
     chatHandler(io, socket) 
     roomHandler(io, socket)
+    youtubeHandler(io, socket)
 })
 
 server.listen(PORT, () => { 
