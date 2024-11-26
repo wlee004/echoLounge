@@ -11,18 +11,18 @@ const SearchBar = () => {
     )
     const { socket, socketConnected } = useSocket()
 
-    
     useEffect(() => { 
         if (socketConnected) { 
             const updateVideoPlayer = (videoId) => { 
-                console.log("from youtubeHandler: ", videoId)
                 setFinalInput(videoId)
             }
 
+            //Get room id from url
             const currRoomId = window.location.href.split("lounge/")[1]
             setRoomId(currRoomId)
             socket.emit("room:joinRoom" , currRoomId)
 
+            //when Youtube handler sends videoId, we update current clients player
             socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
     }, [socket, socketConnected])
@@ -32,7 +32,6 @@ const SearchBar = () => {
     };
 
     const sendVideoUpdate = (videoId) => {
-        console.log(`Emitting to youtubeHandler => videoId: ${videoId} and roomId: ${roomId}`)
         socket.emit("youtube:send_videoId", { videoId , roomId })
     }
 
@@ -42,8 +41,6 @@ const SearchBar = () => {
         // User Submit Youtube link
                 if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
-                console.log("HERE: ", videoId)
-                console.log("test")
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)
                 setSearchInput("")
@@ -61,7 +58,6 @@ const SearchBar = () => {
             .then((response) => response.json())
             .then((data) => {
                 const videoId = data.videoId;
-                console.log("VIDEO ID DATA NEW: ", videoId)
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)
                 setSearchInput("")
