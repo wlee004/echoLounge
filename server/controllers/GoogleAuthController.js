@@ -69,7 +69,7 @@ exports.oauth2_callback = async (req, res) => {
             secure: false, // Set to true for HTTPS
             maxAge: 60 * 60 * 1000, // Token expiration (1 hour)
         })
-        res.redirect("http://localhost:3000/lounge")
+        res.redirect("http://localhost:3000/lobby")
     })
     .catch((error) => { 
         res.status(401).send("Error connecting to grab token: ", error)

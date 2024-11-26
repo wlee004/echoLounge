@@ -35,6 +35,7 @@ const io = new Server(server, {
 
 // Socket Handler Imports
 const chatHandler = require("./socketHandler/ChatHandler")
+const roomHandler = require("./socketHandler/RoomHandler")
 
 // Handle Socket Connections
 io.on('connection', (socket) => { 
@@ -44,7 +45,8 @@ io.on('connection', (socket) => {
         console.log(`User disconnected ${socket.id}`)
     })
 
-    chatHandler(io, socket)
+    chatHandler(io, socket) 
+    roomHandler(io, socket)
 })
 
 server.listen(PORT, () => { 
