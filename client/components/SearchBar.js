@@ -8,15 +8,20 @@ const SearchBar = () => {
     const [finalInput, setFinalInput] = useState(
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
     )
-    const { socket, socketConnected, roomId } = useSocket()
-    
+    const [roomId, setRoomId] = useState("")
+    const { socket, socketConnected } = useSocket()
+     
     useEffect(() => { 
         if (socketConnected) { 
             const updateVideoPlayer = (videoId) => { 
                 setFinalInput(videoId)
             }
 
+            const currRoomId = window.location.href.split("lounge/")[1]
+            setRoomId(currRoomId) 
+            
             //when Youtube handler sends videoId, we update current clients player
+            socket.emit("room:joinRoom" , currRoomId)
             socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
     }, [socket, socketConnected])
@@ -80,8 +85,8 @@ const SearchBar = () => {
                 </button>
             </form>
             <div>
-                <YoutubePlayer input={finalInput} />
-                <Chat />
+                <YoutubePlayer input={{ finalInput, roomId }} />
+                <Chat roomId={ roomId }/>
             </div>
         </div>
         )

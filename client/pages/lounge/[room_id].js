@@ -8,9 +8,9 @@ export default function Lounge() {
 		<div>
 			<header>
 				<nav className= "navbar bg-body-tertiary" data-bs-theme="dark">
-				<div className="container-fluid">
-					<span className="navbar-brand mb-0 h1">Echo Lounge</span>
-				</div>
+					<div className="container-fluid">
+						<span className="navbar-brand mb-0 h1">Echo Lounge</span>
+					</div>
 				</nav>
 			</header>
 			<SearchBar/>

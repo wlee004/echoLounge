@@ -10,7 +10,6 @@ const youtubeHandler = (io, socket) => {
     socket.on("youtube:clicked_play", (roomId) => {
         socket.to(roomId).emit("youtube:play_video")
     })
-
 }
 
 module.exports = youtubeHandler

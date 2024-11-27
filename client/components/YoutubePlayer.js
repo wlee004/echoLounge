@@ -3,7 +3,7 @@ import YouTube from 'react-youtube'
 import { useSocket } from '../pages/socketProvider'
 
 const YoutubePlayer = (props) => {
-    const { socket, socketConnected, roomId } = useSocket()
+    const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
 
     useEffect(() => { 
@@ -11,14 +11,12 @@ const YoutubePlayer = (props) => {
             const pauseVideoPlayer = () => { 
                 if (playerRef.current) {
                     playerRef.current.pauseVideo()
-                    console.log("Video paused by another client")
                 }
             }
 
             const playVideoPlayer = () => { 
                 if (playerRef.current) {
                     playerRef.current.playVideo()
-                    console.log("Video paused by another client")
                 }
             }
 
@@ -30,15 +28,15 @@ const YoutubePlayer = (props) => {
 
     //On click, emit to other clients if its paused or continue playing
     const onPlayerPause = (event) => {
-        socket.emit("youtube:clicked_pause", roomId)
+        socket.emit("youtube:clicked_pause", props.input.roomId)
     }
 
     const onPlayerReady = (event) => {
-        socket.emit("youtube:clicked_play", roomId)
+        socket.emit("youtube:clicked_play", props.input.roomId)
     }
 
     const onReady = (event) => {
-        playerRef.current = event.target; 
+        playerRef.current = event.target
     }
 
     const opts = {
@@ -52,7 +50,7 @@ const YoutubePlayer = (props) => {
     
     return (
         <div>
-            <YouTube videoId={props.input} 
+            <YouTube videoId={props.input.finalInput} 
             opts={opts} 
             onReady={onReady} 
             onPause={onPlayerPause} 

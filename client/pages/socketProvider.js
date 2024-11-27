@@ -7,7 +7,6 @@ const SocketContext = React.createContext()
 const SocketProvider = ({children}) => {
     const [socket, setSocket] = useState(null)
     const [socketConnected, setSocketConnected] = useState(false)
-    const [roomId, setRoomId] = useState("")
     
     useEffect(() => {
         const socketInstance = io.connect("http://localhost:8080")
@@ -15,18 +14,6 @@ const SocketProvider = ({children}) => {
    
         socketInstance.on('connect', () => {
             setSocketConnected(true)
-            
-            //To make a single room connection for all components
-            //we pass room id to children and connect to room once
-            //TODO This only works for lounge/{roomid}
-            const currRoomId = window.location.href.split("lounge/")[1]
-            if(currRoomId){
-                setRoomId(currRoomId) 
-                
-                if(socket){
-                    socket.emit("room:joinRoom" , roomId)
-                }
-            }
         })
       
         socketInstance.on('disconnect', () => {
@@ -40,7 +27,7 @@ const SocketProvider = ({children}) => {
     }, [])
 
     return (
-        <SocketContext.Provider value={{ socket, socketConnected, roomId }}>
+        <SocketContext.Provider value={{ socket, socketConnected}}>
             {children}
         </SocketContext.Provider>
     )
