@@ -4,8 +4,7 @@ import { useSocket } from '../pages/socketProvider'
 const Chat = () => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
-    const [roomId, setRoomId] = useState("")
-    const { socket, socketConnected } = useSocket()
+    const { socket, socketConnected, roomId } = useSocket()
     
     useEffect(() => { 
         if (socketConnected) { 
@@ -14,10 +13,7 @@ const Chat = () => {
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
             }
 
-            const currRoomId = window.location.href.split("lounge/")[1]
-            setRoomId(currRoomId)
-            socket.emit("room:joinRoom" , currRoomId)
-
+            socket.emit("room:joinRoom" , roomId)
             socket.on("chat:receive_message", appendMessageLogs)
         }
         // return () => {

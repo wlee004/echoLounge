@@ -7,13 +7,18 @@ const SocketContext = React.createContext()
 const SocketProvider = ({children}) => {
     const [socket, setSocket] = useState(null)
     const [socketConnected, setSocketConnected] = useState(false)
+    const [roomId, setRoomId] = useState("")
     
     useEffect(() => {
         const socketInstance = io.connect("http://localhost:8080")
         setSocket(socketInstance)
    
         socketInstance.on('connect', () => {
-            setSocketConnected(true) 
+            setSocketConnected(true)
+            const currRoomId = window.location.href.split("lounge/")[1]
+            if(currRoomId){
+                setRoomId(currRoomId) 
+            }
         })
       
         socketInstance.on('disconnect', () => {
@@ -27,7 +32,7 @@ const SocketProvider = ({children}) => {
     }, [])
 
     return (
-        <SocketContext.Provider value={{ socket, socketConnected }}>
+        <SocketContext.Provider value={{ socket, socketConnected, roomId }}>
             {children}
         </SocketContext.Provider>
     )

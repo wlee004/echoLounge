@@ -4,23 +4,19 @@ import Chat from "./Chat.js"
 import { useSocket } from '../pages/socketProvider'
 
 const SearchBar = () => {
-    const [roomId, setRoomId] = useState("")
     const [searchInput, setSearchInput] = useState("")
     const [finalInput, setFinalInput] = useState(
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
     )
-    const { socket, socketConnected } = useSocket()
-
+    const { socket, socketConnected, roomId } = useSocket()
+    
     useEffect(() => { 
         if (socketConnected) { 
             const updateVideoPlayer = (videoId) => { 
                 setFinalInput(videoId)
             }
 
-            //Get room id from url
-            const currRoomId = window.location.href.split("lounge/")[1]
-            setRoomId(currRoomId)
-            socket.emit("room:joinRoom" , currRoomId)
+            socket.emit("room:joinRoom" , roomId)
 
             //when Youtube handler sends videoId, we update current clients player
             socket.on("youtube:receive_videoId", updateVideoPlayer)
