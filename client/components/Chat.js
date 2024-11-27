@@ -1,11 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useSocket } from '../pages/socketProvider'
+import React, { useEffect, useState } from 'react'
+import { useSocket } from "../pages/socketProvider"
 
 const Chat = (props) => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    // const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
-
+    const username = localStorage.getItem("username")
+    
+    // useEffect(() => { 
+    //     setUsername(localStorage.getItem("username"))
+    // }, [])
+    
     useEffect(() => { 
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
@@ -35,8 +41,11 @@ const Chat = (props) => {
         <div>
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
+                    {
+                        <h1>{username}</h1>
+                    }
                     {messageLogs.map((msg, index) => {
-                            return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
+                        return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
                     })}
                 </ul>
             </div>

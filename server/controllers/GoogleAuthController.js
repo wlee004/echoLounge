@@ -1,19 +1,13 @@
-const express = require("express")
-const session = require("express-session")
 const { google } = require("googleapis")
 require("dotenv").config()
 const crypto = require("crypto")
 const axios = require("axios")
-const cookieParser = require("cookie-parser")
 
 /**
  * To use OAuth2 authentication, we need access to a CLIENT_ID, CLIENT_SECRET, AND REDIRECT_URI
  * from the client_secret.json file. To get these credentials for your application, visit
  * https://console.cloud.google.com/apis/credentials.
  */
-
-const app = express()
-app.use(cookieParser())
 
 exports.oauth2_get = (req, res) => { 
     const oauth2Client = new google.auth.OAuth2(
@@ -28,9 +22,8 @@ exports.oauth2_get = (req, res) => {
     // Generate a secure random state value.
     const state = crypto.randomBytes(32).toString('hex')
 
-    // TODO FIX Session state
     // Store state in the session
-    // req.session.state = state
+    req.session.state = state
     
     // Generate a url that asks permissions for the Drive activity and Google Calendar scope
     const authorizationUrl = oauth2Client.generateAuthUrl({
@@ -61,14 +54,10 @@ exports.oauth2_callback = async (req, res) => {
         redirect_uri: process.env.GOOGLE_AUTH_REDIRECT_URL,
         grant_type: 'authorization_code'
     })
-    .then( response => { 
+    .then(response => { 
         const access_token = response.data.access_token
         console.log(response)
-        res.cookie('access_token', access_token, {
-            httpOnly: true,  // Ensures that the cookie is not accessible via JavaScript
-            secure: false, // Set to true for HTTPS
-            maxAge: 60 * 60 * 1000, // Token expiration (1 hour)
-        })
+        req.session.google_auth_token = access_token
         res.redirect("http://localhost:3000/lobby")
     })
     .catch((error) => { 
@@ -77,11 +66,23 @@ exports.oauth2_callback = async (req, res) => {
 }
 
 exports.oauth2_protected = async (req, res) => { 
-    const token = req.cookies.access_token
+    const token = req.session.google_auth_token
     if (token) { 
         // Validate Token
         res.status(202).send("Authorized with Google API")
     } else { 
         res.status(401).send("Unauthorized with Google API")
     }
+}
+
+exports.oauth2_logout = async (req, res) => { 
+    req.session.destroy((error) => { 
+        if (error) { 
+            console.error(`Error destroying session: ${error}`)
+            res.send("Error destroying session")
+        } else { 
+            console.log("Session Destroyed")
+            res.redirect("http://localhost:3000/")
+        }
+    })
 }

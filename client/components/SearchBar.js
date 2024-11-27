@@ -28,17 +28,17 @@ const SearchBar = () => {
 
     const handleInputChange = (event) => {
         setSearchInput(event.target.value)
-    };
+    }
 
     const sendVideoUpdate = (videoId) => {
         socket.emit("youtube:send_videoId", { videoId , roomId })
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
         if (searchInput.includes("https://www.youtube.com/")) {
-        // User Submit Youtube link
-                if (searchInput.split("v=").length > 1) {
+            // User Submit Youtube link
+            if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)

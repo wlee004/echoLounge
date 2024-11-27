@@ -1,30 +1,27 @@
-// pages/lobby.js
-import React, { useEffect, useState, useContext } from 'react' 
-import { useSocket } from '../pages/socketProvider'
+import React, { useState } from 'react' 
 import { useRouter } from 'next/navigation'
+import axios from "axios"
 
 const Lobby = () => {
     const [roomId, setRoomId] = useState('')
-    const { socket, socketConnected } = useSocket()
+    const [username, setUsername] = useState('')
+
     const router = useRouter()
-
-    useEffect(() => { 
-        if (socketConnected) { 
-            console.log("In lobby: ", socket.id)
-        }
-    }, [socket, socketConnected])
-
-    const handleRoomIdChange = (e) => {
-        setRoomId(e.target.value)
-    }
 
     //After submit
     const handleSubmit = async (e) => {
         e.preventDefault()
+        
+        // TODO: Make username unique, and make sure username is auto generated when blank 
+        const currUsername = username
+        localStorage.setItem("username", currUsername)
 
         if (roomId !== "") { 
             router.push(`http://localhost:3000/lounge/${roomId}`)
+        } else { 
+            alert("Please enter a room Id")
         }
+        // TODO Handle case where roomId === ""
     }
 
     return (
@@ -33,14 +30,23 @@ const Lobby = () => {
         <form onSubmit={handleSubmit}>
         <div>
             <label>
-            RoomId: 
+            Username: 
+            </label>
             <input 
-                type="roomId" 
+                type="text" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="Enter your username"
+            />
+            <label>
+            RoomId: 
+            </label>
+            <input 
+                type="text" 
                 value={roomId}
-                onChange={handleRoomIdChange}  
+                onChange={(e) => setRoomId(e.target.value)} 
                 placeholder="Enter your room ID"
             />
-            </label>
         </div>
         <button type="submit">Submit</button>
         </form>
