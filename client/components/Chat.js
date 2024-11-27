@@ -1,23 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useSocket } from '../pages/socketProvider'
 
-const Chat = () => {
+const Chat = (props) => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
-    const [roomId, setRoomId] = useState("")
     const { socket, socketConnected } = useSocket()
-    
+
     useEffect(() => { 
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
-                console.log(newMessage)
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
             }
-
-            const currRoomId = window.location.href.split("lounge/")[1]
-            setRoomId(currRoomId)
-            socket.emit("room:joinRoom" , currRoomId)
-
             socket.on("chat:receive_message", appendMessageLogs)
         }
         // return () => {
@@ -33,7 +26,7 @@ const Chat = () => {
         event.preventDefault()
         if (message !== "") { 
             setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
-            socket.emit("chat:send_message", { message , roomId } )
+            socket.emit("chat:send_message", {message, "roomId": props.roomId} )
             setMessage("")
         }
     }
@@ -45,8 +38,6 @@ const Chat = () => {
                     {messageLogs.map((msg, index) => {
                             return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
                     })}
-                    {/* <li className="message mb-2 p-2 bg-light rounded-3">{messageReceieved}</li> */}
-                    {/* <li className="message mb-2 p-2 bg-secondary text-white rounded-3">{messageReceieved}</li> */}
                 </ul>
             </div>
 

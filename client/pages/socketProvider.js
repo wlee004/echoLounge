@@ -13,7 +13,7 @@ const SocketProvider = ({children}) => {
         setSocket(socketInstance)
    
         socketInstance.on('connect', () => {
-            setSocketConnected(true) 
+            setSocketConnected(true)
         })
       
         socketInstance.on('disconnect', () => {
@@ -27,7 +27,7 @@ const SocketProvider = ({children}) => {
     }, [])
 
     return (
-        <SocketContext.Provider value={{ socket, socketConnected }}>
+        <SocketContext.Provider value={{ socket, socketConnected}}>
             {children}
         </SocketContext.Provider>
     )
