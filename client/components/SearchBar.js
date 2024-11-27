@@ -16,8 +16,6 @@ const SearchBar = () => {
                 setFinalInput(videoId)
             }
 
-            socket.emit("room:joinRoom" , roomId)
-
             //when Youtube handler sends videoId, we update current clients player
             socket.on("youtube:receive_videoId", updateVideoPlayer)
         }

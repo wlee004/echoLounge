@@ -13,7 +13,6 @@ const Chat = () => {
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
             }
 
-            socket.emit("room:joinRoom" , roomId)
             socket.on("chat:receive_message", appendMessageLogs)
         }
         // return () => {
