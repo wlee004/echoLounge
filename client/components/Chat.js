@@ -4,15 +4,13 @@ import { useSocket } from "../pages/socketProvider"
 const Chat = (props) => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    const [username, setUsername] = useState("")
     // const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
-    const username = localStorage.getItem("username")
-    
-    // useEffect(() => { 
-    //     setUsername(localStorage.getItem("username"))
-    // }, [])
+
     
     useEffect(() => { 
+        setUsername(localStorage.getItem("username"))
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])

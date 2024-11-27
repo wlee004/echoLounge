@@ -21,7 +21,6 @@ const Lobby = () => {
         } else { 
             alert("Please enter a room Id")
         }
-        // TODO Handle case where roomId === ""
     }
 
     return (
