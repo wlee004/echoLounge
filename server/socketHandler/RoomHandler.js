@@ -1,9 +1,7 @@
 const roomHandler = (io, socket) => { 
     socket.on("room:joinRoom", (roomId) => {
         socket.join(roomId)
-        console.log("\nroomhandler:" ,roomId)
-        console.log("socket id:",socket.id)
-        console.log("socket rooms:",socket.rooms)
+        console.log(`Socket ${socket.id} joined room ${roomId}`)
     })
 
     // socket.on('room:leaveRoom', ({ roomId }) => {

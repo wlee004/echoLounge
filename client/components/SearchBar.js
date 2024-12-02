@@ -20,25 +20,21 @@ const SearchBar = () => {
             const currRoomId = window.location.href.split("lounge/")[1]
             setRoomId(currRoomId) 
             
-            //when Youtube handler sends videoId, we update current clients player
+            // When Youtube handler sends videoId, we update current clients player
             socket.emit("room:joinRoom" , currRoomId)
             socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
     }, [socket, socketConnected])
-
-    const handleInputChange = (event) => {
-        setSearchInput(event.target.value)
-    };
 
     const sendVideoUpdate = (videoId) => {
         socket.emit("youtube:send_videoId", { videoId , roomId })
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
         if (searchInput.includes("https://www.youtube.com/")) {
-        // User Submit Youtube link
-                if (searchInput.split("v=").length > 1) {
+            // User Submit Youtube link
+            if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)
@@ -49,6 +45,8 @@ const SearchBar = () => {
             }
         }
         else if(searchInput){
+            // TODO check for credentials first and then call request only if credentials are satisfied
+            // TODO Change fetch to axios
             // Make the API request to the backend
             fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
                 method: "GET",
@@ -56,7 +54,7 @@ const SearchBar = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                const videoId = data.videoId;
+                const videoId = data.videoId
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)
                 setSearchInput("")
@@ -78,7 +76,7 @@ const SearchBar = () => {
                     className="form-control me-2"
                     placeholder="Search"
                     value={searchInput}
-                    onChange={handleInputChange}
+                    onChange={ (event) => setSearchInput(event.target.value) }
                 />
                 <button type="submit" className="btn btn-primary">
                     Search

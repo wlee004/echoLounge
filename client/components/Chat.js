@@ -1,12 +1,21 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useSocket } from '../pages/socketProvider'
+import React, { useEffect, useState } from 'react'
+import { useSocket } from "../pages/socketProvider"
+import { generateGuestUsername } from "./Username"
 
 const Chat = (props) => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
+    const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
 
+    
     useEffect(() => { 
+        // Generate Username if one doesn't exists yet
+        if (localStorage.getItem("username") == null) { 
+            localStorage.setItem("username", generateGuestUsername())
+        }
+        setUsername(localStorage.getItem("username"))
+
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])
@@ -17,10 +26,6 @@ const Chat = (props) => {
         //     socket.off("chat:receive_message", appendMessageLogs)
         // }
     }, [socket, socketConnected])
-
-    const handleInputChange = (event) => { 
-        setMessage(event.target.value)
-    }
 
     const sendMessage = async (event) => {
         event.preventDefault()
@@ -35,8 +40,11 @@ const Chat = (props) => {
         <div>
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
+                    {
+                        <h1>{username}</h1>
+                    }
                     {messageLogs.map((msg, index) => {
-                            return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
+                        return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
                     })}
                 </ul>
             </div>
@@ -47,7 +55,7 @@ const Chat = (props) => {
                         className="form-control me-2"
                         placeholder="Send Message"
                         value={message}
-                        onChange={handleInputChange}
+                        onChange={ (event) => setMessage(event.target.value) }
                     />
                     <button type="submit" className="btn btn-primary">
                         Send

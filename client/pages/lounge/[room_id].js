@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react"
 
 // Components 
-import SearchBar from '../../components/searchbar'
+import SearchBar from "../../components/SearchBar"
 
 export default function Lounge() {
 	return (

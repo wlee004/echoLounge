@@ -3,17 +3,14 @@ require("dotenv").config()
 
 const YOUTUBE_API_URL = process.env.REACT_APP_YOUTUBE_DATA_URL
 const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY
-// TODO Remove this once cookies is added
-const token = "ABC123"
 
 const getVideos = async (req, res) => { 
-    const access_token = req.cookies.access_token
+    const access_token = req.session.google_auth_token
     const query = req.params.input.replace(/\s+/g, '')
     
     if (!query) {
         return res.status(404).json({ message: 'Video Not Found, Query parameter is required' })
     }
-    console.log("COOKIE: ", access_token)
     axios.get(`${YOUTUBE_API_URL}?q=${query}&type=video&key=${API_KEY}`, {
         headers: {
             Authorization: `Bearer ${access_token}`
@@ -21,7 +18,7 @@ const getVideos = async (req, res) => {
     })
     .then(response => {
         // TODO Process response.data and return one videoId
-        res.status(202).json({videoId: response.data.items[0].id.videoId})
+        res.status(200).json({videoId: response.data.items[0].id.videoId})
     })
     .catch(error => {
         if (error.response) {
