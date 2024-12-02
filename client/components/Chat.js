@@ -22,10 +22,6 @@ const Chat = (props) => {
         // }
     }, [socket, socketConnected])
 
-    const handleInputChange = (event) => { 
-        setMessage(event.target.value)
-    }
-
     const sendMessage = async (event) => {
         event.preventDefault()
         if (message !== "") { 
@@ -54,7 +50,7 @@ const Chat = (props) => {
                         className="form-control me-2"
                         placeholder="Send Message"
                         value={message}
-                        onChange={handleInputChange}
+                        onChange={ (event) => setMessage(event.target.value) }
                     />
                     <button type="submit" className="btn btn-primary">
                         Send

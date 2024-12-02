@@ -13,7 +13,11 @@ const Lobby = () => {
         e.preventDefault()
         
         // TODO: Make username unique, and make sure username is auto generated when blank 
-        const currUsername = username
+        var currUsername = username
+        if (username === ''){ 
+            currUsername = "GUEST-" + Math.random().toString(36).toUpperCase().slice(2, 2 + 8)
+            setUsername(currUsername)
+        }
         localStorage.setItem("username", currUsername)
 
         if (roomId !== "") { 
@@ -27,27 +31,27 @@ const Lobby = () => {
     <div>
         <h1>Lets Join A Room!</h1>
         <form onSubmit={handleSubmit}>
-        <div>
-            <label>
-            Username: 
-            </label>
-            <input 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)} 
-                placeholder="Enter your username"
-            />
-            <label>
-            RoomId: 
-            </label>
-            <input 
-                type="text" 
-                value={roomId}
-                onChange={(e) => setRoomId(e.target.value)} 
-                placeholder="Enter your room ID"
-            />
-        </div>
-        <button type="submit">Submit</button>
+            <div>
+                <label>
+                Username: 
+                </label>
+                <input 
+                    type="text" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)} 
+                    placeholder="Enter your username"
+                />
+                <label>
+                RoomId: 
+                </label>
+                <input 
+                    type="text" 
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value)} 
+                    placeholder="Enter your room ID"
+                />
+            </div>
+            <button type="submit">Submit</button>
         </form>
     </div>
     )
