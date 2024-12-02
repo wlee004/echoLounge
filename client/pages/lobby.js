@@ -3,29 +3,22 @@ import { useRouter } from 'next/navigation'
 import { generateGuestUsername } from "../components/Username"
 
 const Lobby = () => {
+    const router = useRouter()
     const [roomId, setRoomId] = useState('')
     const [username, setUsername] = useState('')
 
-    const router = useRouter()
-
     //After submit
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (event) => {
+        event.preventDefault()
         
-        // TODO: Make username unique, and make sure username is auto generated when blank 
-        var currUsername = username
+        // TODO: Make username unique, check against db for existing username?
+        let currUsername = username
         if (username === '') { 
             currUsername = generateGuestUsername()
-            console.log(`Username: ${currUsername}`)
             setUsername(currUsername)
         }
         localStorage.setItem("username", currUsername)
-
-        if (roomId !== "") { 
-            router.push(`http://localhost:3000/lounge/${roomId}`)
-        } else { 
-            alert("Please enter a room Id")
-        }
+        router.push(`http://localhost:3000/lounge/${roomId}`)
     }
 
     return (
@@ -50,6 +43,7 @@ const Lobby = () => {
                     value={roomId}
                     onChange={(e) => setRoomId(e.target.value)} 
                     placeholder="Enter your room ID"
+                    required
                 />
             </div>
             <button type="submit">Submit</button>

@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from "../pages/socketProvider"
+import { generateGuestUsername } from "./Username"
 
 const Chat = (props) => {
     const [message, setMessage] = useState("")
     const [messageLogs, setMessageLogs] = useState([])
     const [username, setUsername] = useState("")
-    // const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
 
     
     useEffect(() => { 
+        // Generate Username if one doesn't exists yet
+        if (localStorage.getItem("username") == null) { 
+            localStorage.setItem("username", generateGuestUsername())
+        }
         setUsername(localStorage.getItem("username"))
+
         if (socketConnected) { 
             const appendMessageLogs = (newMessage) => { 
                 setMessageLogs((previousMessages) => [...previousMessages, newMessage])

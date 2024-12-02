@@ -45,6 +45,8 @@ const SearchBar = () => {
             }
         }
         else if(searchInput){
+            // TODO check for credentials first and then call request only if credentials are satisfied
+            // TODO Change fetch to axios
             // Make the API request to the backend
             fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
                 method: "GET",
@@ -52,7 +54,7 @@ const SearchBar = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                const videoId = data.videoId;
+                const videoId = data.videoId
                 setFinalInput(videoId)
                 sendVideoUpdate(videoId)
                 setSearchInput("")
