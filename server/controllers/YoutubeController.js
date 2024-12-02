@@ -18,7 +18,7 @@ const getVideos = async (req, res) => {
     })
     .then(response => {
         // TODO Process response.data and return one videoId
-        res.status(202).json({videoId: response.data.items[0].id.videoId})
+        res.status(200).json({videoId: response.data.items[0].id.videoId})
     })
     .catch(error => {
         if (error.response) {

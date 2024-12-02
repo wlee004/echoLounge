@@ -69,7 +69,7 @@ exports.oauth2_protected = async (req, res) => {
     const token = req.session.google_auth_token
     if (token) { 
         // Validate Token
-        res.status(202).send("Authorized with Google API")
+        res.status(200).send("Authorized with Google API")
     } else { 
         res.status(401).send("Unauthorized with Google API")
     }
