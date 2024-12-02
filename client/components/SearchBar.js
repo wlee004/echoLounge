@@ -9,12 +9,14 @@ const SearchBar = () => {
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
     )
     const [roomId, setRoomId] = useState("")
+    const [videoTitle, setVideoTitle] = useState("")
     const { socket, socketConnected } = useSocket()
      
     useEffect(() => { 
         if (socketConnected) { 
-            const updateVideoPlayer = (videoId) => { 
-                setFinalInput(videoId)
+            const updateVideoPlayer = (data) => { 
+                setVideoTitle(data.videoTitle)
+                setFinalInput(data.videoId)
             }
 
             const currRoomId = window.location.href.split("lounge/")[1]
@@ -26,8 +28,8 @@ const SearchBar = () => {
         }
     }, [socket, socketConnected])
 
-    const sendVideoUpdate = (videoId) => {
-        socket.emit("youtube:send_videoId", { videoId , roomId })
+    const sendVideoUpdate = (videoId, videoTitle) => {
+        socket.emit("youtube:send_videoId", { videoId , videoTitle , roomId })
     }
 
     const handleSubmit = async (event) => {
@@ -36,8 +38,9 @@ const SearchBar = () => {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
+                setVideoTitle("Pasted URL")
                 setFinalInput(videoId)
-                sendVideoUpdate(videoId)
+                sendVideoUpdate(videoId,videoTitle)
                 setSearchInput("")
             } else {
                 // TODO Render an error message to client
@@ -54,9 +57,10 @@ const SearchBar = () => {
             })
             .then((response) => response.json())
             .then((data) => {
-                const videoId = data.videoId
+                const videoId = data.videoId;
+                setVideoTitle(data.videoTitle)
                 setFinalInput(videoId)
-                sendVideoUpdate(videoId)
+                sendVideoUpdate(videoId, data.videoTitle)
                 setSearchInput("")
             })
             .catch((error) => {
@@ -83,11 +87,17 @@ const SearchBar = () => {
                 </button>
             </form>
             <div>
-                <YoutubePlayer input={{ finalInput, roomId }} />
+                <YoutubePlayer input={{ finalInput, videoTitle, roomId }} />
+                {/* <h2>Queue</h2>
+                <ul>
+                    {queue.map((title, index) => {
+                        return <li key={index}> {title} </li>
+                    })}
+                </ul> */}
                 <Chat roomId={ roomId }/>
             </div>
         </div>
-        )
+    )
 }
 
 export default SearchBar

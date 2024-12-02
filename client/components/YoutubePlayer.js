@@ -5,9 +5,17 @@ import { useSocket } from '../pages/socketProvider'
 const YoutubePlayer = (props) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
+    const [queue, setQueue] = useState([])
+    const [currentVideo, setCurrentVideo] = useState(null)
+    //const queue = ["Test1","Test2","Test3"]
 
     useEffect(() => { 
         if (socketConnected) { 
+
+            if (props.input.finalInput){
+                setQueue((prevQueue) => [...prevQueue, [[props.input.finalInput][props.input.videoTitle]]]);
+            }
+
             const pauseVideoPlayer = () => { 
                 if (playerRef.current) {
                     playerRef.current.pauseVideo()
@@ -39,6 +47,25 @@ const YoutubePlayer = (props) => {
         playerRef.current = event.target
     }
 
+    const handleVideoEnd = () => {
+        setCurrentSong(null)
+    }
+
+    // const onEnd = () => {
+    //     // Move to the next video in the queue
+    //     const nextQueue = queue.slice(1)
+    //     setQueue(nextQueue)
+    //     if (nextQueue.length > 0) {
+    //       setCurrentVideo(nextQueue[0])
+    //     } else {
+    //       console.log("Queue is empty")
+    //     }
+    // }
+
+    const addToQueue = (videoId,videoTitle) => {
+        setQueue([...queue, [videoId,videoTitle]])
+    }
+
     const opts = {
         height: '390',
         width: '640',
@@ -50,11 +77,15 @@ const YoutubePlayer = (props) => {
     
     return (
         <div>
-            <YouTube videoId={props.input.finalInput} 
-            opts={opts} 
-            onReady={onReady} 
-            onPause={onPlayerPause} 
-            onPlay={onPlayerReady}/>
+            <div>
+                <YouTube videoId={currentVideo} 
+                opts={opts} 
+                onReady={onReady} 
+                onPause={onPlayerPause} 
+                onPlay={onPlayerReady}
+                //onEnd={onEnd}
+                />
+            </div>          
         </div>
     )
 }
