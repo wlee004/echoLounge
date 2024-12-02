@@ -1,6 +1,6 @@
 import React, { useState } from 'react' 
 import { useRouter } from 'next/navigation'
-import axios from "axios"
+import { generateGuestUsername } from "../components/Username"
 
 const Lobby = () => {
     const [roomId, setRoomId] = useState('')
@@ -14,8 +14,9 @@ const Lobby = () => {
         
         // TODO: Make username unique, and make sure username is auto generated when blank 
         var currUsername = username
-        if (username === ''){ 
-            currUsername = "GUEST-" + Math.random().toString(36).toUpperCase().slice(2, 2 + 8)
+        if (username === '') { 
+            currUsername = generateGuestUsername()
+            console.log(`Username: ${currUsername}`)
             setUsername(currUsername)
         }
         localStorage.setItem("username", currUsername)
