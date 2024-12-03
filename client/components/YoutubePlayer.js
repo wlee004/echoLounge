@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
-import { useSocket } from '../pages/socketProvider'
+import { useSocket } from './socketProvider'
 
 const YoutubePlayer = (props) => {
-    const { socket, socketConnected } = useSocket()
+    const {socket, socketConnected} = useSocket()
     const playerRef = useRef(null);
     const [isSeeking, setIsSeeking] = useState(false)
     const [currentVideo, setCurrentVideo] = useState(null)
@@ -44,7 +44,7 @@ const YoutubePlayer = (props) => {
         }
     }, [props.input.finalInput])
 
-    //On click, emit to other clients if its paused or continue playing
+    // On click, emit to other clients if its paused or continue playing
     const onPlayerPause = (event) => {
         socket.emit("youtube:clicked_pause", props.input.roomId)
     }
@@ -67,7 +67,7 @@ const YoutubePlayer = (props) => {
         if (event.data === 2) {
             // Call handleSeek when seeking or playing
             setIsSeeking(true)
-          }
+        }
 
         if (event.data === 1 && isSeeking === true){
                 const roomId = props.input.roomId
@@ -88,13 +88,14 @@ const YoutubePlayer = (props) => {
     return (
         <div>
             <div>
-                <YouTube videoId={currentVideo} 
-                opts={opts} 
-                onReady={onReady} 
-                onPause={onPlayerPause} 
-                onPlay={onPlayerReady}
-                onStateChange={onPlayerStateChange}
-                onEnd={onVideoEnd}
+                <YouTube 
+                    videoId={currentVideo} 
+                    opts={opts} 
+                    onReady={onReady} 
+                    onPause={onPlayerPause} 
+                    onPlay={onPlayerReady}
+                    onStateChange={onPlayerStateChange}
+                    onEnd={onVideoEnd}
                 />
             </div>       
         </div>

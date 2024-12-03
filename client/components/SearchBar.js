@@ -1,64 +1,43 @@
 import React, { useState, useEffect } from "react"
-import YoutubePlayer from "./YoutubePlayer.js"
-import Chat from "./Chat.js"
-import VideoQueue from "./VideoQueue.js"
-import { useSocket } from '../pages/socketProvider'
+import { useSocket } from './socketProvider.js'
 
-const SearchBar = () => {
+const SearchBar = ({roomId, updateSharedFinalInput}) => {
     const [searchInput, setSearchInput] = useState("")
     const [finalInput, setFinalInput] = useState(
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
     )
-    const [roomId, setRoomId] = useState("")
     const [videoTitle, setVideoTitle] = useState("Temp")
     const [queue, setQueue] = useState([])
     const { socket, socketConnected } = useSocket()
-     
+
     useEffect(() => { 
         if (socketConnected) { 
-            const updateVideoPlayer = (data) => { 
-                //TODO Queue update here, other clients queue always at 0
-                if(queue.length === 0){
-                    setVideoTitle(data.videoTitle)
-                    setFinalInput(data.videoId)
-                }
-                setQueue((prevQueue) => ([...prevQueue, data.videoId]))
-            }
-
-            const currRoomId = window.location.href.split("lounge/")[1]
-            setRoomId(currRoomId) 
+            // TODO Insert any socket connections needed for SearchBar
             
-            // When Youtube handler sends videoId, we update current clients player
-            socket.emit("room:joinRoom" , currRoomId)
-            socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
     }, [socket, socketConnected])
 
-    const sendVideoUpdate = (videoId, videoTitle) => {
-        socket.emit("youtube:send_videoId", { videoId , videoTitle , roomId })
-    }
-
     const handleSubmit = async (event) => {
+        console.log("ROOM ID FROM SEARCH BAR: ", roomId, updateSharedFinalInput)
+        const sendVideoUpdate = (videoId, videoTitle) => {
+            socket.emit("youtube:send_videoId", { videoId , videoTitle , roomId })
+        }
+
         event.preventDefault()
         if (searchInput.includes("https://www.youtube.com/")) {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
-                const currVideoTitle = "Pasted URL"
-                //TODO Queue update here
-                if(queue.length === 0){
-                    setVideoTitle(currVideoTitle)
-                    setFinalInput(videoId)
-                }
+                setVideoTitle(`Youtube Link: ${searchInput}`)
+                updateSharedFinalInput(videoId)
                 setQueue((prevQueue) => ([...prevQueue, videoId]))
-                sendVideoUpdate(videoId,videoTitle)
+                sendVideoUpdate(videoId, videoTitle)
                 setSearchInput("")
             } else {
-                // TODO Render an error message to client
-                console.error(`Error with Youtube Request: ${error}`)
+                alert("Invalid Youtube Link")
             }
         }
-        else if(searchInput){
+        else if (searchInput) {
             // TODO check for credentials first and then call request only if credentials are satisfied
             // TODO Change fetch to axios
             // Make the API request to the backend
@@ -102,11 +81,6 @@ const SearchBar = () => {
                     Search
                 </button>
             </form>
-            <div>
-                <YoutubePlayer input={{ finalInput, videoTitle, roomId }} />\
-                <VideoQueue queue={queue}/>
-                <Chat roomId={ roomId }/>
-            </div>
         </div>
     )
 }
