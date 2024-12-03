@@ -16,6 +16,12 @@ const youtubeHandler = (io, socket) => {
     socket.on("youtube:clicked_play", (roomId) => {
         socket.to(roomId).emit("youtube:play_video")
     })
+
+    socket.on('youtube:seekVideo', (data)=>{
+        console.log("timestamp:", data.timeStamp)
+        socket.to(data.roomId).emit("youtube:sync_video", data.timeStamp)
+    })
+
 }
 
 module.exports = youtubeHandler

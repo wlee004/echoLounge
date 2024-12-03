@@ -1,20 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
 import { useSocket } from '../pages/socketProvider'
 
 const YoutubePlayer = (props) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
-    const [queue, setQueue] = useState([])
-    const [currentVideo, setCurrentVideo] = useState(null)
+    const [isSeeking, setIsSeeking] = useState(false)
+    const [currentTime, setCurrentTime] = useState(0);
     //const queue = ["Test1","Test2","Test3"]
 
     useEffect(() => { 
         if (socketConnected) { 
-
-            if (props.input.finalInput){
-                setQueue((prevQueue) => [...prevQueue, [[props.input.finalInput][props.input.videoTitle]]]);
-            }
 
             const pauseVideoPlayer = () => { 
                 if (playerRef.current) {
@@ -28,8 +24,17 @@ const YoutubePlayer = (props) => {
                 }
             }
 
+            const syncVideoPlayer = (timeStamp) => {
+                console.log("timeStamp: ", timeStamp)
+                if (playerRef.current) {
+                    playerRef.current.seekTo(timeStamp)
+                    setIsSeeking(false)
+                }
+            }
+
             socket.on("youtube:pause_video", pauseVideoPlayer)
             socket.on("youtube:play_video", playVideoPlayer)
+            socket.on("youtube:sync_video", syncVideoPlayer)
         }
 
     }, [socket, socketConnected])
@@ -45,25 +50,22 @@ const YoutubePlayer = (props) => {
 
     const onReady = (event) => {
         playerRef.current = event.target
+        
     }
 
-    const handleVideoEnd = () => {
-        setCurrentSong(null)
-    }
+    const onPlayerStateChange = (event) => {
+        if (event.data === 2) {
+            // Call handleSeek when seeking or playing
+            setIsSeeking(true)
+          }
 
-    // const onEnd = () => {
-    //     // Move to the next video in the queue
-    //     const nextQueue = queue.slice(1)
-    //     setQueue(nextQueue)
-    //     if (nextQueue.length > 0) {
-    //       setCurrentVideo(nextQueue[0])
-    //     } else {
-    //       console.log("Queue is empty")
-    //     }
-    // }
-
-    const addToQueue = (videoId,videoTitle) => {
-        setQueue([...queue, [videoId,videoTitle]])
+        if (event.data === 1 && isSeeking === true){
+                const roomId = props.input.roomId
+                const timeStamp = event.target.getCurrentTime();
+                console.log(timeStamp)
+                socket.emit("youtube:seekVideo", { roomId, timeStamp });
+        }
+    
     }
 
     const opts = {
@@ -78,11 +80,14 @@ const YoutubePlayer = (props) => {
     return (
         <div>
             <div>
-                <YouTube videoId={currentVideo} 
+                <YouTube videoId={props.input.finalInput} 
                 opts={opts} 
                 onReady={onReady} 
                 onPause={onPlayerPause} 
                 onPlay={onPlayerReady}
+                onStateChange={onPlayerStateChange}
+                
+                //onSeek={onSeek}
                 //onEnd={onEnd}
                 />
             </div>          
