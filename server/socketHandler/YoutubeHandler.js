@@ -1,6 +1,7 @@
 const youtubeHandler = (io, socket) => { 
     socket.on("youtube:send_videoId", (data) => {
         console.log("title:", data.videoTitle)
+        console.log("video id: " , data.videoId)
         socket.to(data.roomId).emit("youtube:receive_videoId", {videoId: data.videoId, videoTitle: data.videoTitle})
     })
 
@@ -18,8 +19,12 @@ const youtubeHandler = (io, socket) => {
     })
 
     socket.on('youtube:seekVideo', (data)=>{
-        console.log("timestamp:", data.timeStamp)
         socket.to(data.roomId).emit("youtube:sync_video", data.timeStamp)
+    })
+
+    //TODO From video end, ask to get next vid on queue and update finalInput on searchbar
+    socket.on("youtube:video_ended", (roomId) => {
+        socket.to(roomId).emit("youtube:next_video")
     })
 
 }

@@ -6,12 +6,10 @@ const YoutubePlayer = (props) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
     const [isSeeking, setIsSeeking] = useState(false)
-    const [currentTime, setCurrentTime] = useState(0);
-    //const queue = ["Test1","Test2","Test3"]
-
+    const [currentVideo, setCurrentVideo] = useState(null)
+    
     useEffect(() => { 
         if (socketConnected) { 
-
             const pauseVideoPlayer = () => { 
                 if (playerRef.current) {
                     playerRef.current.pauseVideo()
@@ -39,6 +37,13 @@ const YoutubePlayer = (props) => {
 
     }, [socket, socketConnected])
 
+    useEffect(() => {
+        if(props.input.finalInput){   
+            setCurrentVideo(props.input.finalInput)
+            console.log(currentVideo)
+        }
+    }, [props.input.finalInput])
+
     //On click, emit to other clients if its paused or continue playing
     const onPlayerPause = (event) => {
         socket.emit("youtube:clicked_pause", props.input.roomId)
@@ -48,9 +53,14 @@ const YoutubePlayer = (props) => {
         socket.emit("youtube:clicked_play", props.input.roomId)
     }
 
+    //TODO When video ends, emit for next video in the queue
+    const onVideoEnd = () => {
+        console.log("End video start")
+        socket.emit("youtube:video_ended", props.input.roomId)
+    }
+
     const onReady = (event) => {
         playerRef.current = event.target
-        
     }
 
     const onPlayerStateChange = (event) => {
@@ -62,10 +72,8 @@ const YoutubePlayer = (props) => {
         if (event.data === 1 && isSeeking === true){
                 const roomId = props.input.roomId
                 const timeStamp = event.target.getCurrentTime();
-                console.log(timeStamp)
-                socket.emit("youtube:seekVideo", { roomId, timeStamp });
+                socket.emit("youtube:seekVideo", { roomId, timeStamp })
         }
-    
     }
 
     const opts = {
@@ -80,17 +88,15 @@ const YoutubePlayer = (props) => {
     return (
         <div>
             <div>
-                <YouTube videoId={props.input.finalInput} 
+                <YouTube videoId={currentVideo} 
                 opts={opts} 
                 onReady={onReady} 
                 onPause={onPlayerPause} 
                 onPlay={onPlayerReady}
                 onStateChange={onPlayerStateChange}
-                
-                //onSeek={onSeek}
-                //onEnd={onEnd}
+                onEnd={onVideoEnd}
                 />
-            </div>          
+            </div>       
         </div>
     )
 }

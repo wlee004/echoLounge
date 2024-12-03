@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import YoutubePlayer from "./YoutubePlayer.js"
 import Chat from "./Chat.js"
+import VideoQueue from "./VideoQueue.js"
 import { useSocket } from '../pages/socketProvider'
 
 const SearchBar = () => {
@@ -9,14 +10,19 @@ const SearchBar = () => {
         "https://www.youtube.com/watch?v=0H69m7TWB6E"
     )
     const [roomId, setRoomId] = useState("")
-    const [videoTitle, setVideoTitle] = useState("")
+    const [videoTitle, setVideoTitle] = useState("Temp")
+    const [queue, setQueue] = useState([])
     const { socket, socketConnected } = useSocket()
      
     useEffect(() => { 
         if (socketConnected) { 
             const updateVideoPlayer = (data) => { 
-                setVideoTitle(data.videoTitle)
-                setFinalInput(data.videoId)
+                //TODO Queue update here, other clients queue always at 0
+                if(queue.length === 0){
+                    setVideoTitle(data.videoTitle)
+                    setFinalInput(data.videoId)
+                }
+                setQueue((prevQueue) => ([...prevQueue, data.videoId]))
             }
 
             const currRoomId = window.location.href.split("lounge/")[1]
@@ -38,8 +44,13 @@ const SearchBar = () => {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
-                setVideoTitle("Pasted URL")
-                setFinalInput(videoId)
+                const currVideoTitle = "Pasted URL"
+                //TODO Queue update here
+                if(queue.length === 0){
+                    setVideoTitle(currVideoTitle)
+                    setFinalInput(videoId)
+                }
+                setQueue((prevQueue) => ([...prevQueue, videoId]))
                 sendVideoUpdate(videoId,videoTitle)
                 setSearchInput("")
             } else {
@@ -58,8 +69,13 @@ const SearchBar = () => {
             .then((response) => response.json())
             .then((data) => {
                 const videoId = data.videoId;
-                setVideoTitle(data.videoTitle)
-                setFinalInput(videoId)
+                const currVideoTitle = data.videoTitle
+                //TODO Queue update here
+                if(queue.length === 0){
+                    setVideoTitle(currVideoTitle)
+                    setFinalInput(videoId)
+                }
+                setQueue((prevQueue) => ([...prevQueue, videoId]))
                 sendVideoUpdate(videoId, data.videoTitle)
                 setSearchInput("")
             })
@@ -87,13 +103,8 @@ const SearchBar = () => {
                 </button>
             </form>
             <div>
-                <YoutubePlayer input={{ finalInput, videoTitle, roomId }} />
-                {/* <h2>Queue</h2>
-                <ul>
-                    {queue.map((title, index) => {
-                        return <li key={index}> {title} </li>
-                    })}
-                </ul> */}
+                <YoutubePlayer input={{ finalInput, videoTitle, roomId }} />\
+                <VideoQueue queue={queue}/>
                 <Chat roomId={ roomId }/>
             </div>
         </div>
