@@ -3,7 +3,7 @@ import YouTube from 'react-youtube'
 import { useSocket } from './socketProvider'
 
 const YoutubePlayer = (props) => {
-    const {socket, socketConnected} = useSocket()
+    const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
     const [isSeeking, setIsSeeking] = useState(false)
     const [currentVideo, setCurrentVideo] = useState(null)
@@ -53,7 +53,7 @@ const YoutubePlayer = (props) => {
         socket.emit("youtube:clicked_play", props.input.roomId)
     }
 
-    //TODO When video ends, emit for next video in the queue
+    // TODO When video ends, emit for next video in the queue
     const onVideoEnd = () => {
         console.log("End video start")
         socket.emit("youtube:video_ended", props.input.roomId)
@@ -89,13 +89,13 @@ const YoutubePlayer = (props) => {
         <div>
             <div>
                 <YouTube 
-                    videoId={currentVideo} 
-                    opts={opts} 
-                    onReady={onReady} 
-                    onPause={onPlayerPause} 
-                    onPlay={onPlayerReady}
-                    onStateChange={onPlayerStateChange}
-                    onEnd={onVideoEnd}
+                    videoId={ currentVideo } 
+                    opts={ opts } 
+                    onReady={ onReady } 
+                    onPause={ onPlayerPause } 
+                    onPlay={ onPlayerReady }
+                    onStateChange={ onPlayerStateChange }
+                    onEnd={ onVideoEnd }
                 />
             </div>       
         </div>

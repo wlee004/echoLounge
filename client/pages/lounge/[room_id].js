@@ -22,21 +22,20 @@ const Room = () => {
 
 	useEffect(() => { 
         if (socketConnected) { 
-            const updateVideoPlayer = (data) => { 
-                //TODO Queue update here, other clients queue always at 0
-                if(queue.length === 0){
-                    setVideoTitle(data.videoTitle)
-                    setFinalInput(data.videoId)
-                }
+
+			// Socket join Room
+            const currRoomId = window.location.href.split("lounge/")[1]
+			setRoomId(currRoomId) 
+			socket.emit("room:joinRoom" , currRoomId)
+
+			// TODO: MOVE THIS TO YoutubePlayer
+			const updateVideoPlayer = (data) => { 
+				setVideoTitle(data.videoTitle)
+				setFinalInput(data.videoId)
                 setQueue((prevQueue) => ([...prevQueue, data.videoId]))
             }
-
-            const currRoomId = window.location.href.split("lounge/")[1]
-            console.log("currRoomId: ", currRoomId)
-			setRoomId(currRoomId) 
             
             // When Youtube handler sends videoId, we update current clients player
-            socket.emit("room:joinRoom" , currRoomId)
             socket.on("youtube:receive_videoId", updateVideoPlayer)
         }                                                                                                                                                                                                                                   
     }, [socket, socketConnected])

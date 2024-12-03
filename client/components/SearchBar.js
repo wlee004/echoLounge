@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { useSocket } from './socketProvider.js'
+import { useSocket } from "./socketProvider.js"
+import axios from "axios"
 
 const SearchBar = ({roomId, updateSharedFinalInput}) => {
     const [searchInput, setSearchInput] = useState("")
-    const [finalInput, setFinalInput] = useState(
-        "https://www.youtube.com/watch?v=0H69m7TWB6E"
-    )
     const [videoTitle, setVideoTitle] = useState("Temp")
     const [queue, setQueue] = useState([])
     const { socket, socketConnected } = useSocket()
@@ -18,7 +16,6 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
     }, [socket, socketConnected])
 
     const handleSubmit = async (event) => {
-        console.log("ROOM ID FROM SEARCH BAR: ", roomId, updateSharedFinalInput)
         const sendVideoUpdate = (videoId, videoTitle) => {
             socket.emit("youtube:send_videoId", { videoId , videoTitle , roomId })
         }
@@ -28,10 +25,12 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
+                updateSharedFinalInput(videoId) // Update shared state 
+
+                // Set State 
                 setVideoTitle(`Youtube Link: ${searchInput}`)
-                updateSharedFinalInput(videoId)
-                setQueue((prevQueue) => ([...prevQueue, videoId]))
-                sendVideoUpdate(videoId, videoTitle)
+                setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
+                sendVideoUpdate(videoId, videoTitle) // Communicate to Socket.io
                 setSearchInput("")
             } else {
                 alert("Invalid Youtube Link")
@@ -47,13 +46,12 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
             })
             .then((response) => response.json())
             .then((data) => {
-                const videoId = data.videoId;
+                const videoId = data.videoId
                 const currVideoTitle = data.videoTitle
-                //TODO Queue update here
-                if(queue.length === 0){
-                    setVideoTitle(currVideoTitle)
-                    setFinalInput(videoId)
-                }
+                
+                setVideoTitle(currVideoTitle)
+                setFinalInput(videoId)
+                
                 setQueue((prevQueue) => ([...prevQueue, videoId]))
                 sendVideoUpdate(videoId, data.videoTitle)
                 setSearchInput("")
