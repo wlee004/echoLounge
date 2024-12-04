@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSocket } from "../pages/socketProvider"
+import { useSocket } from "./socketProvider"
 import { generateGuestUsername } from "./Username"
 
 const Chat = (props) => {
@@ -8,7 +8,6 @@ const Chat = (props) => {
     const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
 
-    
     useEffect(() => { 
         // Generate Username if one doesn't exists yet
         if (localStorage.getItem("username") == null) { 

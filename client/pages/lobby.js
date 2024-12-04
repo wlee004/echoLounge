@@ -22,33 +22,33 @@ const Lobby = () => {
     }
 
     return (
-    <div>
-        <h1>Lets Join A Room!</h1>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>
-                Username: 
-                </label>
-                <input 
-                    type="text" 
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)} 
-                    placeholder="Enter your username"
-                />
-                <label>
-                RoomId: 
-                </label>
-                <input 
-                    type="text" 
-                    value={roomId}
-                    onChange={(e) => setRoomId(e.target.value)} 
-                    placeholder="Enter your room ID"
-                    required
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+        <div>
+            <h1>Lets Join A Room!</h1>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>
+                    Username: 
+                    </label>
+                    <input 
+                        type="text" 
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)} 
+                        placeholder="Enter your username"
+                    />
+                    <label>
+                    RoomId: 
+                    </label>
+                    <input 
+                        type="text" 
+                        value={roomId}
+                        onChange={(e) => setRoomId(e.target.value)} 
+                        placeholder="Enter your room ID"
+                        required
+                    />
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     )
 }
 

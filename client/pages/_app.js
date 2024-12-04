@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { SocketProvider } from './socketProvider'
+import { SocketProvider } from '../components/socketProvider'
 
 function MyApp({ Component, pageProps }) {
     return (
