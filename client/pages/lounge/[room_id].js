@@ -20,23 +20,16 @@ const Room = () => {
 		setFinalInput(newValue)
 	}
 
+	const updateSharedVideoTitle = (newValue) => { 
+		setVideoTitle(newValue)
+	}
+
 	useEffect(() => { 
         if (socketConnected) { 
-
 			// Socket join Room
             const currRoomId = window.location.href.split("lounge/")[1]
 			setRoomId(currRoomId) 
 			socket.emit("room:joinRoom" , currRoomId)
-
-			// TODO: MOVE THIS TO YoutubePlayer
-			const updateVideoPlayer = (data) => { 
-				setVideoTitle(data.videoTitle)
-				setFinalInput(data.videoId)
-                setQueue((prevQueue) => ([...prevQueue, data.videoId]))
-            }
-            
-            // When Youtube handler sends videoId, we update current clients player
-            socket.on("youtube:receive_videoId", updateVideoPlayer)
         }                                                                                                                                                                                                                                   
     }, [socket, socketConnected])
 
@@ -56,7 +49,11 @@ const Room = () => {
 				/>
 			</div>
 			<div>
-                <YoutubePlayer input={{ finalInput, videoTitle, roomId }} />
+                <YoutubePlayer 
+					finalInput={ finalInput }
+					roomId={ roomId }
+					updateSharedVideoTitle = { updateSharedVideoTitle }
+				/>
                 <VideoQueue queue={ queue }/>
                 <Chat roomId={ roomId }/>
             </div>

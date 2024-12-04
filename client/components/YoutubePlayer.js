@@ -2,14 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
 import { useSocket } from './socketProvider'
 
-const YoutubePlayer = (props) => {
+const YoutubePlayer = ({ finalInput, roomId, updateSharedVideoTitle }) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null);
     const [isSeeking, setIsSeeking] = useState(false)
-    const [currentVideo, setCurrentVideo] = useState(null)
+    const [currentVideoId, setCurrentVideoId] = useState("")
+
+    useEffect(() => {
+        setCurrentVideoId(finalInput)
+        console.log(currentVideoId)
+    }, [finalInput])
     
     useEffect(() => { 
         if (socketConnected) { 
+            // Socket Sync YoutubePlayer
             const pauseVideoPlayer = () => { 
                 if (playerRef.current) {
                     playerRef.current.pauseVideo()
@@ -29,34 +35,33 @@ const YoutubePlayer = (props) => {
                     setIsSeeking(false)
                 }
             }
+            // TODO: Update this when you update to videoQueue
+            const updateVideoPlayer = (data) => { 
+                updateSharedVideoTitle(data.videoTitle)
+                setCurrentVideoId(data.videoId)
+                // setQueue((prevQueue) => ([...prevQueue, data.videoId]))
+            }
 
             socket.on("youtube:pause_video", pauseVideoPlayer)
             socket.on("youtube:play_video", playVideoPlayer)
             socket.on("youtube:sync_video", syncVideoPlayer)
+            socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
 
     }, [socket, socketConnected])
 
-    useEffect(() => {
-        if(props.input.finalInput){   
-            setCurrentVideo(props.input.finalInput)
-            console.log(currentVideo)
-        }
-    }, [props.input.finalInput])
-
-    // On click, emit to other clients if its paused or continue playing
-    const onPlayerPause = (event) => {
-        socket.emit("youtube:clicked_pause", props.input.roomId)
+    const onPlayerPause = () => {
+        socket.emit("youtube:clicked_pause", roomId)
     }
 
-    const onPlayerReady = (event) => {
-        socket.emit("youtube:clicked_play", props.input.roomId)
+    const onPlayerReady = () => {
+        socket.emit("youtube:clicked_play", roomId)
     }
 
-    // TODO When video ends, emit for next video in the queue
+    // TODO When video ends, play next video in queue
     const onVideoEnd = () => {
         console.log("End video start")
-        socket.emit("youtube:video_ended", props.input.roomId)
+        socket.emit("youtube:video_ended", roomId)
     }
 
     const onReady = (event) => {
@@ -64,13 +69,25 @@ const YoutubePlayer = (props) => {
     }
 
     const onPlayerStateChange = (event) => {
+        /**
+         * 
+         * Player will emit state when change happens
+         * Reference: https://developers.google.com/youtube/iframe_api_reference
+         * 
+         * -1 (unstarted)
+         * 0 (ended)
+         * 1 (playing)
+         * 2 (paused)
+         * 3 (buffering)
+         * 5 (video cued)
+         */
+
         if (event.data === 2) {
             // Call handleSeek when seeking or playing
             setIsSeeking(true)
         }
 
         if (event.data === 1 && isSeeking === true){
-                const roomId = props.input.roomId
                 const timeStamp = event.target.getCurrentTime();
                 socket.emit("youtube:seekVideo", { roomId, timeStamp })
         }
@@ -89,7 +106,7 @@ const YoutubePlayer = (props) => {
         <div>
             <div>
                 <YouTube 
-                    videoId={ currentVideo } 
+                    videoId={ currentVideoId } 
                     opts={ opts } 
                     onReady={ onReady } 
                     onPause={ onPlayerPause } 
