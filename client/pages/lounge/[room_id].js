@@ -30,7 +30,15 @@ const Room = () => {
             const currRoomId = window.location.href.split("lounge/")[1]
 			setRoomId(currRoomId) 
 			socket.emit("room:joinRoom" , currRoomId)
-        }                                                                                                                                                                                                                                   
+
+			// TODO: Update this when you update to videoQueue
+			const updateVideoPlayer = (data) => { 
+				setFinalInput(data.videoId)
+				setVideoTitle(data.videoTitle)
+				// setQueue((prevQueue) => ([...prevQueue, data.videoId]))
+			}
+			socket.on("youtube:receive_videoId", updateVideoPlayer)
+        }     		
     }, [socket, socketConnected])
 
 	return (
@@ -51,7 +59,9 @@ const Room = () => {
 			<div>
                 <YoutubePlayer 
 					finalInput={ finalInput }
+					videoTitle={ videoTitle }
 					roomId={ roomId }
+					updateSharedFinalInput = { updateSharedFinalInput }
 					updateSharedVideoTitle = { updateSharedVideoTitle }
 				/>
                 <VideoQueue queue={ queue }/>

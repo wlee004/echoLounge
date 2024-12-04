@@ -2,15 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
 import { useSocket } from './socketProvider'
 
-const YoutubePlayer = ({ finalInput, roomId, updateSharedVideoTitle }) => {
+const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput, updateSharedVideoTitle }) => {
     const { socket, socketConnected } = useSocket()
-    const playerRef = useRef(null);
+    const playerRef = useRef(null)
+    const previousFinalInput = useRef(finalInput)
     const [isSeeking, setIsSeeking] = useState(false)
     const [currentVideoId, setCurrentVideoId] = useState("")
 
-    useEffect(() => {
+    useEffect(() => { 
+        // if (finalInput !== previousFinalInput) { 
+        //     console.log(finalInput, previousFinalInput.current)
+        //     setCurrentVideoId(finalInput)
+        //     previousFinalInput.current = finalInput
+        // }
+        console.log("SET NEW VIDEO")
         setCurrentVideoId(finalInput)
-        console.log(currentVideoId)
+
     }, [finalInput])
     
     useEffect(() => { 
@@ -35,17 +42,10 @@ const YoutubePlayer = ({ finalInput, roomId, updateSharedVideoTitle }) => {
                     setIsSeeking(false)
                 }
             }
-            // TODO: Update this when you update to videoQueue
-            const updateVideoPlayer = (data) => { 
-                updateSharedVideoTitle(data.videoTitle)
-                setCurrentVideoId(data.videoId)
-                // setQueue((prevQueue) => ([...prevQueue, data.videoId]))
-            }
 
             socket.on("youtube:pause_video", pauseVideoPlayer)
             socket.on("youtube:play_video", playVideoPlayer)
             socket.on("youtube:sync_video", syncVideoPlayer)
-            socket.on("youtube:receive_videoId", updateVideoPlayer)
         }
 
     }, [socket, socketConnected])

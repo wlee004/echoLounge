@@ -1,8 +1,13 @@
 const youtubeHandler = (io, socket) => { 
+
     socket.on("youtube:send_videoId", (data) => {
+        console.log("youtube:send_videoId")
         console.log("title:", data.videoTitle)
         console.log("video id: " , data.videoId)
-        socket.to(data.roomId).emit("youtube:receive_videoId", {videoId: data.videoId, videoTitle: data.videoTitle})
+        socket.to(data.roomId).emit("youtube:receive_videoId", {
+            videoId: data.videoId, 
+            videoTitle: data.videoTitle
+        })
     })
 
     socket.on("youtube:clicked_pause", (roomId) => {
@@ -21,7 +26,6 @@ const youtubeHandler = (io, socket) => {
     socket.on("youtube:video_ended", (roomId) => {
         socket.to(roomId).emit("youtube:next_video")
     })
-
 }
 
 module.exports = youtubeHandler
