@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 
 // React Components 
 import { useSocket } from '../../components/socketProvider'
@@ -9,20 +9,20 @@ import VideoQueue from "../../components/VideoQueue"
 
 const Room = () => {
     const [finalInput, setFinalInput] = useState(
-        "https://www.youtube.com/watch?v=0H69m7TWB6E"
+        "ekr2nIex040"
     )
     const [roomId, setRoomId] = useState("")
     const [videoTitle, setVideoTitle] = useState("Temp")
     const [queue, setQueue] = useState([])
     const { socket, socketConnected } = useSocket()
 
-	const updateSharedFinalInput = (newValue) => {
+	const updateSharedFinalInput = useCallback((newValue) => {
 		setFinalInput(newValue)
-	}
+	})
 
-	const updateSharedVideoTitle = (newValue) => { 
+	const updateSharedVideoTitle = useCallback((newValue) => { 
 		setVideoTitle(newValue)
-	}
+	})
 
 	useEffect(() => { 
         if (socketConnected) { 

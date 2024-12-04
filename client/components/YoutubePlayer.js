@@ -10,14 +10,8 @@ const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput,
     const [currentVideoId, setCurrentVideoId] = useState("")
 
     useEffect(() => { 
-        // if (finalInput !== previousFinalInput) { 
-        //     console.log(finalInput, previousFinalInput.current)
-        //     setCurrentVideoId(finalInput)
-        //     previousFinalInput.current = finalInput
-        // }
         console.log("SET NEW VIDEO")
         setCurrentVideoId(finalInput)
-
     }, [finalInput])
     
     useEffect(() => { 
@@ -104,17 +98,15 @@ const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput,
     
     return (
         <div>
-            <div>
-                <YouTube 
-                    videoId={ currentVideoId } 
-                    opts={ opts } 
-                    onReady={ onReady } 
-                    onPause={ onPlayerPause } 
-                    onPlay={ onPlayerReady }
-                    onStateChange={ onPlayerStateChange }
-                    onEnd={ onVideoEnd }
-                />
-            </div>       
+            <YouTube 
+                videoId={ currentVideoId } 
+                opts={ opts } 
+                onReady={ onReady } 
+                onPause={ onPlayerPause } 
+                onPlay={ onPlayerReady }
+                onStateChange={ onPlayerStateChange }
+                onEnd={ onVideoEnd }
+            />
         </div>
     )
 }
