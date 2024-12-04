@@ -30,7 +30,7 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
                 // Set State 
                 setVideoTitle(`Youtube Link: ${searchInput}`)
                 setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
-                sendVideoUpdate(videoId, videoTitle) // Communicate to Socket.io
+                sendVideoUpdate(videoId, videoTitle) 
                 setSearchInput("")
             } else {
                 alert("Invalid Youtube Link")

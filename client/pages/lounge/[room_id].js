@@ -61,8 +61,6 @@ const Room = () => {
 					finalInput={ finalInput }
 					videoTitle={ videoTitle }
 					roomId={ roomId }
-					updateSharedFinalInput = { updateSharedFinalInput }
-					updateSharedVideoTitle = { updateSharedVideoTitle }
 				/>
                 <VideoQueue queue={ queue }/>
                 <Chat roomId={ roomId }/>
