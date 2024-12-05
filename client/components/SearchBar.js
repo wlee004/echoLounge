@@ -15,11 +15,13 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
     }, [socket, socketConnected])
 
     const handleSubmit = async (event) => {
+        event.preventDefault()
+
         const sendVideoUpdate = (videoId, videoTitle) => {
             socket.emit("youtube:send_videoId", { videoId, videoTitle, roomId })
         }
 
-        event.preventDefault()
+
         if (searchInput.includes("https://www.youtube.com/")) {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
@@ -37,31 +39,27 @@ const SearchBar = ({roomId, updateSharedFinalInput}) => {
         }
         else if (searchInput) {
             // TODO check for credentials first and then call request only if credentials are satisfied
-            // TODO Change fetch to axios
-            // Make the API request to the backend
-            fetch(`http://localhost:8080/api/youtube/getLink/${searchInput}`, {
-                method: "GET",
-                credentials: "include", // Ensure cookies are included in the request
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                const videoId = data.videoId
-                const currVideoTitle = data.videoTitle
-                
-                // Set States
-                updateSharedFinalInput(videoId) // Sends state to update [room_id] which updates Youtube Player
-                setVideoTitle(currVideoTitle) // TODO Need to move this to [room_id]
-                // setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
-                sendVideoUpdate(videoId, currVideoTitle)
-                setSearchInput("")
-            })
-            .catch((error) => {
-                console.error(`Error with Youtube Request: ${error}`)
-            })
+            // Query Google API to get video information
+            axios.get(`http://localhost:8080/api/youtube/getLink/${searchInput}`, { 
+                withCredentials: true
+                })
+                .then((response) => response.data)
+                .then((data) => {
+                    console.log("AXIOS: ", data)
+                    const videoId = data.videoId
+                    const currVideoTitle = data.videoTitle
+                    
+                    // Set States
+                    updateSharedFinalInput(videoId) // Sends state to update [room_id] which updates Youtube Player
+                    setVideoTitle(currVideoTitle) // TODO Need to move this to [room_id]
+                    // setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
+                    sendVideoUpdate(videoId, currVideoTitle)
+                    setSearchInput("")
+                })
+                .catch((error) => {
+                    alert(`Error with Youtube Request: ${error}`)
+                })
         } 
-        else {
-            console.log("No input detected. Please put an input in the search bar.")
-        }
     }
 
     return (
