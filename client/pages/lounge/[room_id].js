@@ -33,6 +33,7 @@ const Room = () => {
 
 			// TODO: Update this when you update to videoQueue
 			const updateVideoPlayer = (data) => { 
+				console.log("SETTING VIDEO TO PLAYER: ", data.videoId)
 				setFinalInput(data.videoId)
 				setVideoTitle(data.videoTitle)
 				// setQueue((prevQueue) => ([...prevQueue, data.videoId]))
