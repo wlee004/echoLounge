@@ -72,7 +72,7 @@ const YoutubePlayer = ({ queue, roomId }) => {
 
     const onVideoEnd = () => {
         console.log("Video Ended")
-        // If last video 
+        // If last video reset the index
         if (queue.length - 1 === queueIndex) { 
             setQueueIndex(-1)
         }
