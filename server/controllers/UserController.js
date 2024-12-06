@@ -9,7 +9,6 @@ const getUsername = async (req, res) => {
     // if (username == null) { 
     //     res.status(404).json({"message": "Username not registered"})
     // }
-    console.log("username: ", req.session.username)
     res.status(200).json({
         username: req.session.username
     })

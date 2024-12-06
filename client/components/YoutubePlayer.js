@@ -2,17 +2,34 @@ import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
 import { useSocket } from './socketProvider'
 
-const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput, updateSharedVideoTitle }) => {
+const YoutubePlayer = ({ queue, roomId }) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null)
-    const previousFinalInput = useRef(finalInput)
     const [isSeeking, setIsSeeking] = useState(false)
+    const [queueIndex, setQueueIndex] = useState(-1)
     const [currentVideoId, setCurrentVideoId] = useState("")
 
+    const queueNextSong = () => { 
+        let newQueueIndex = queueIndex + 1 
+        if (queueIndex === -1) { 
+            newQueueIndex = queue.length - 1
+        }
+        if (queue.length > newQueueIndex) { 
+            const newVideoId = queue[newQueueIndex].videoId
+            setCurrentVideoId(newVideoId)
+            setQueueIndex(newQueueIndex) 
+        }
+    }
+
     useEffect(() => { 
-        console.log("SET NEW VIDEO")
-        setCurrentVideoId(finalInput)
-    }, [finalInput])
+        if (queueIndex === -1 && queue.length !== 0) { 
+            queueNextSong()
+        }
+        /**
+         * TODO: Have Else statement that check if current video is at the end, 
+         * TODO: if so go to next song
+         */
+    }, [queue])
     
     useEffect(() => { 
         if (socketConnected) { 
@@ -30,7 +47,6 @@ const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput,
             }
 
             const syncVideoPlayer = (timeStamp) => {
-                console.log("timeStamp: ", timeStamp)
                 if (playerRef.current) {
                     playerRef.current.seekTo(timeStamp)
                     setIsSeeking(false)
@@ -52,10 +68,12 @@ const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput,
         socket.emit("youtube:clicked_play", roomId)
     }
 
-    // TODO When video ends, play next video in queue
     const onVideoEnd = () => {
-        console.log("End video start")
-        socket.emit("youtube:video_ended", roomId)
+        // If last video reset the index
+        if (queue.length - 1 === queueIndex) { 
+            setQueueIndex(-1)
+        }
+        queueNextSong()
     }
 
     const onReady = (event) => {
@@ -100,6 +118,7 @@ const YoutubePlayer = ({ finalInput, videoTitle, roomId, updateSharedFinalInput,
         <div>
             <YouTube 
                 videoId={ currentVideoId } 
+                // videoId={ queue[0].videoId } 
                 opts={ opts } 
                 onReady={ onReady } 
                 onPause={ onPlayerPause } 

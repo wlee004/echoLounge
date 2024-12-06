@@ -56,7 +56,6 @@ exports.oauth2_callback = async (req, res) => {
     })
     .then(response => { 
         const access_token = response.data.access_token
-        console.log(response)
         req.session.google_auth_token = access_token
         res.redirect("http://localhost:3000/lobby")
     })

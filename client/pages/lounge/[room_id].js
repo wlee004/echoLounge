@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
+// const Deque = require("collections/deque")
+import Deque from "collections/deque"
 
 // React Components 
 import { useSocket } from '../../components/socketProvider'
@@ -8,20 +10,18 @@ import Chat from "../../components/Chat"
 import VideoQueue from "../../components/VideoQueue"
 
 const Room = () => {
-    const [finalInput, setFinalInput] = useState(
-        "ekr2nIex040"
-    )
     const [roomId, setRoomId] = useState("")
-    const [videoTitle, setVideoTitle] = useState("Temp")
-    const [queue, setQueue] = useState([])
+    const [queue, setQueue] = useState(new Deque())
     const { socket, socketConnected } = useSocket()
 
-	const updateSharedFinalInput = useCallback((newValue) => {
-		setFinalInput(newValue)
-	})
-
-	const updateSharedVideoTitle = useCallback((newValue) => { 
-		setVideoTitle(newValue)
+	const appendVideoToQueue = useCallback((newVideoId, newVideoTitle) => { 
+		const newVideo = {videoId: newVideoId, videoTitle: newVideoTitle}
+		const newQueue = queue.clone()
+		newQueue.push(newVideo)
+		if (socketConnected) { 
+			socket.emit("youtube:send_queue", { queue: newQueue, roomId })
+		}
+		setQueue(newQueue)
 	})
 
 	useEffect(() => { 
@@ -31,13 +31,10 @@ const Room = () => {
 			setRoomId(currRoomId) 
 			socket.emit("room:joinRoom" , currRoomId)
 
-			// TODO: Update this when you update to videoQueue
-			const updateVideoPlayer = (data) => { 
-				setFinalInput(data.videoId)
-				setVideoTitle(data.videoTitle)
-				// setQueue((prevQueue) => ([...prevQueue, data.videoId]))
+			const updateVideoPlayer = (newQueue) => { 
+				setQueue(newQueue)
 			}
-			socket.on("youtube:receive_videoId", updateVideoPlayer)
+			socket.on("youtube:receive_queue", updateVideoPlayer)
         }     		
     }, [socket, socketConnected])
 
@@ -53,16 +50,13 @@ const Room = () => {
 			<div>
 				<SearchBar 
 					roomId={ roomId } 
-					updateSharedFinalInput={ updateSharedFinalInput } 
+					appendVideoToQueue={ appendVideoToQueue } 
 				/>
 			</div>
 			<div>
                 <YoutubePlayer 
-					finalInput={ finalInput }
-					videoTitle={ videoTitle }
+					queue={ queue }
 					roomId={ roomId }
-					updateSharedFinalInput = { updateSharedFinalInput }
-					updateSharedVideoTitle = { updateSharedVideoTitle }
 				/>
                 <VideoQueue queue={ queue }/>
                 <Chat roomId={ roomId }/>
