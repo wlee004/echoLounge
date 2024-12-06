@@ -1,8 +1,6 @@
 const youtubeHandler = (io, socket) => { 
 
     socket.on("youtube:send_queue", (data) => {
-        console.log("youtube:send_queue: ", data.queue)
-        console.log("roomId: ", data.roomId)
         socket.to(data.roomId).emit("youtube:receive_queue", data.queue)
     })
 

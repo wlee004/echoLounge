@@ -16,7 +16,6 @@ const YoutubePlayer = ({ queue, roomId }) => {
         }
         if (queue.length > newQueueIndex) { 
             const newVideoId = queue[newQueueIndex].videoId
-            console.log("new video: ", queue, newVideoId, newQueueIndex)
             setCurrentVideoId(newVideoId)
             setQueueIndex(newQueueIndex) 
         }
@@ -48,7 +47,6 @@ const YoutubePlayer = ({ queue, roomId }) => {
             }
 
             const syncVideoPlayer = (timeStamp) => {
-                console.log("timeStamp: ", timeStamp)
                 if (playerRef.current) {
                     playerRef.current.seekTo(timeStamp)
                     setIsSeeking(false)
@@ -71,7 +69,6 @@ const YoutubePlayer = ({ queue, roomId }) => {
     }
 
     const onVideoEnd = () => {
-        console.log("Video Ended")
         // If last video reset the index
         if (queue.length - 1 === queueIndex) { 
             setQueueIndex(-1)

@@ -29,7 +29,6 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
                 })
                 .then((response) => response.data)
                 .then((data) => {
-                    console.log("AXIOS: ", data)
                     const videoId = data.videoId
                     const videoTitle = data.videoTitle
                     

@@ -17,9 +17,7 @@ const Room = () => {
 	const appendVideoToQueue = useCallback((newVideoId, newVideoTitle) => { 
 		const newVideo = {videoId: newVideoId, videoTitle: newVideoTitle}
 		const newQueue = queue.clone()
-		console.log("APPEND VIDEO OLD QUEUE: ", newQueue)
 		newQueue.push(newVideo)
-		console.log("APPEND VIDEO: ", newQueue)
 		if (socketConnected) { 
 			socket.emit("youtube:send_queue", { queue: newQueue, roomId })
 		}
