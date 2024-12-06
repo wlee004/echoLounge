@@ -4,21 +4,15 @@ import axios from "axios"
 
 const SearchBar = ({roomId, appendVideoToQueue}) => {
     const [searchInput, setSearchInput] = useState("")
-    const [videoTitle, setVideoTitle] = useState("")
     const { socket, socketConnected } = useSocket()
-
-    useEffect(() => { 
-        if (socketConnected) { 
-            // TODO Insert any socket connections needed for SearchBar
-            
-        }
-    }, [socket, socketConnected])
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
         const sendRoomVideoUpdate = (videoId, videoTitle) => {
-            socket.emit("youtube:send_videoId", { videoId, videoTitle, roomId })
+            if (socketConnected) { 
+                socket.emit("youtube:send_videoId", { videoId, videoTitle, roomId })
+            }
         }
 
         if (searchInput.includes("https://www.youtube.com/")) {
@@ -26,18 +20,15 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
             if (searchInput.split("v=").length > 1) {
                 const videoId = searchInput.split("v=")[1].split("&")[0]
                 const videoTitle = `Youtube Link: ${searchInput}`
+                
                 // Set States
-                // updateSharedFinalInput(videoId)
                 appendVideoToQueue(videoId, videoTitle)
-                setVideoTitle(`Youtube Link: ${searchInput}`)
-                // setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
                 sendRoomVideoUpdate(videoId, videoTitle) 
                 setSearchInput("")
             } else {
                 alert("Invalid Youtube Link")
             }
-        }
-        else if (searchInput) {
+        } else if (searchInput) {
             // TODO check for credentials first and then call request only if credentials are satisfied
             // Query Google API to get video information
             axios.get(`http://localhost:8080/api/youtube/getLink/${searchInput}`, { 
@@ -50,10 +41,7 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
                     const videoTitle = data.videoTitle
                     
                     // Set States
-                    // updateSharedFinalInput(videoId) // Sends state to update [room_id] which updates Youtube Player
                     appendVideoToQueue(videoId, videoTitle)
-                    setVideoTitle(videoTitle) // TODO Need to move this to [room_id]
-                    // setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
                     sendRoomVideoUpdate(videoId, videoTitle)
                     setSearchInput("")
                 })

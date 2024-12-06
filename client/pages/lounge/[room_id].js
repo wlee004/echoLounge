@@ -10,29 +10,15 @@ import Chat from "../../components/Chat"
 import VideoQueue from "../../components/VideoQueue"
 
 const Room = () => {
-    const [finalInput, setFinalInput] = useState(
-        "ekr2nIex040"
-    )
     const [roomId, setRoomId] = useState("")
-    const [videoTitle, setVideoTitle] = useState("Temp")
     const [queue, setQueue] = useState(new Deque())
     const { socket, socketConnected } = useSocket()
-
-	const updateSharedFinalInput = useCallback((newValue) => {
-		setFinalInput(newValue)
-	})
 
 	const appendVideoToQueue = useCallback((newVideoId, newVideoTitle) => { 
 		const newVideo = {videoId: newVideoId, videoTitle: newVideoTitle}
 		const newQueue = queue.clone()
 		newQueue.push(newVideo)
-		setQueue(newQueue)
-	})
-
-	const removeFirstVideoFromQueue = useCallback(() => { 
-		const newQueue = queue.clone()
-		newQueue.shift()
-		console.log("After Shifting: ", newQueue)
+		console.log("APPEND VIDEO: ", newQueue)
 		setQueue(newQueue)
 	})
 
@@ -45,10 +31,8 @@ const Room = () => {
 
 			// TODO: Update this when you update to videoQueue
 			const updateVideoPlayer = (data) => { 
-				console.log("SETTING VIDEO TO PLAYER: ", data.videoId)
-				setFinalInput(data.videoId)
-				setVideoTitle(data.videoTitle)
-				// setQueue((prevQueue) => ([...prevQueue, data.videoId]))
+				console.log("APPENDING VIDEO TO QUEUE: ", data.videoId, data.videoTitle)
+				appendVideoToQueue(data.videoId, data.videoTitle)
 			}
 			socket.on("youtube:receive_videoId", updateVideoPlayer)
         }     		
@@ -71,10 +55,8 @@ const Room = () => {
 			</div>
 			<div>
                 <YoutubePlayer 
-					finalInput={ finalInput }
 					queue={ queue }
 					roomId={ roomId }
-					removeFirstVideoFromQueue = { removeFirstVideoFromQueue }
 				/>
                 <VideoQueue queue={ queue }/>
                 <Chat roomId={ roomId }/>
