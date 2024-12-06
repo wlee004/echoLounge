@@ -10,7 +10,10 @@ const YoutubePlayer = ({ queue, roomId }) => {
     const [currentVideoId, setCurrentVideoId] = useState("")
 
     const queueNextSong = () => { 
-        const newQueueIndex = queueIndex + 1 
+        let newQueueIndex = queueIndex + 1 
+        if (queueIndex === -1) { 
+            newQueueIndex = queue.length - 1
+        }
         if (queue.length > newQueueIndex) { 
             const newVideoId = queue[newQueueIndex].videoId
             console.log("new video: ", queue, newVideoId, newQueueIndex)
@@ -69,6 +72,10 @@ const YoutubePlayer = ({ queue, roomId }) => {
 
     const onVideoEnd = () => {
         console.log("Video Ended")
+        // If last video 
+        if (queue.length - 1 === queueIndex) { 
+            setQueueIndex(-1)
+        }
         queueNextSong()
     }
 
