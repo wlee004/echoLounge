@@ -29,6 +29,13 @@ const Room = () => {
 		setQueue(newQueue)
 	})
 
+	const removeFirstVideoFromQueue = useCallback(() => { 
+		const newQueue = queue.clone()
+		newQueue.shift()
+		console.log("After Shifting: ", newQueue)
+		setQueue(newQueue)
+	})
+
 	useEffect(() => { 
         if (socketConnected) { 
 			// Socket join Room
@@ -67,6 +74,7 @@ const Room = () => {
 					finalInput={ finalInput }
 					queue={ queue }
 					roomId={ roomId }
+					removeFirstVideoFromQueue = { removeFirstVideoFromQueue }
 				/>
                 <VideoQueue queue={ queue }/>
                 <Chat roomId={ roomId }/>

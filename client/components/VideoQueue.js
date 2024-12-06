@@ -7,7 +7,14 @@ const VideoQueue = (props) => {
             <h2>Queue</h2>
             <ul>
                 {props.queue.map((videoData, index) => {
-                    return <li key={index}> videoId: {videoData.videoId} videoTitle: {videoData.videoTitle} </li>
+                    /**
+                     * Schema for videoData
+                     *  {
+                     *    videoId: string 
+                     *    videoTitle: string
+                     *  }
+                     */
+                    return <li key={index}> videoTitle: {videoData.videoTitle} </li>
                 })}
             </ul>
         </div>

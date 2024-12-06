@@ -47,14 +47,14 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
                 .then((data) => {
                     console.log("AXIOS: ", data)
                     const videoId = data.videoId
-                    const currVideoTitle = data.videoTitle
+                    const videoTitle = data.videoTitle
                     
                     // Set States
                     // updateSharedFinalInput(videoId) // Sends state to update [room_id] which updates Youtube Player
                     appendVideoToQueue(videoId, videoTitle)
-                    setVideoTitle(currVideoTitle) // TODO Need to move this to [room_id]
+                    setVideoTitle(videoTitle) // TODO Need to move this to [room_id]
                     // setQueue((prevQueue) => ([...prevQueue, videoId])) // TODO REMOVE THIS FROM SEARCHBAR
-                    sendRoomVideoUpdate(videoId, currVideoTitle)
+                    sendRoomVideoUpdate(videoId, videoTitle)
                     setSearchInput("")
                 })
                 .catch((error) => {
