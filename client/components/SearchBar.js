@@ -9,12 +9,6 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const sendRoomVideoUpdate = (videoId, videoTitle) => {
-            if (socketConnected) { 
-                socket.emit("youtube:send_videoId", { videoId, videoTitle, roomId })
-            }
-        }
-
         if (searchInput.includes("https://www.youtube.com/")) {
             // User Submit Youtube link
             if (searchInput.split("v=").length > 1) {
@@ -23,7 +17,6 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
                 
                 // Set States
                 appendVideoToQueue(videoId, videoTitle)
-                sendRoomVideoUpdate(videoId, videoTitle) 
                 setSearchInput("")
             } else {
                 alert("Invalid Youtube Link")
@@ -42,7 +35,6 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
                     
                     // Set States
                     appendVideoToQueue(videoId, videoTitle)
-                    sendRoomVideoUpdate(videoId, videoTitle)
                     setSearchInput("")
                 })
                 .catch((error) => {

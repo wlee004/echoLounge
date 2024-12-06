@@ -17,8 +17,12 @@ const Room = () => {
 	const appendVideoToQueue = useCallback((newVideoId, newVideoTitle) => { 
 		const newVideo = {videoId: newVideoId, videoTitle: newVideoTitle}
 		const newQueue = queue.clone()
+		console.log("APPEND VIDEO OLD QUEUE: ", newQueue)
 		newQueue.push(newVideo)
 		console.log("APPEND VIDEO: ", newQueue)
+		if (socketConnected) { 
+			socket.emit("youtube:send_queue", { queue: newQueue, roomId })
+		}
 		setQueue(newQueue)
 	})
 
@@ -29,12 +33,10 @@ const Room = () => {
 			setRoomId(currRoomId) 
 			socket.emit("room:joinRoom" , currRoomId)
 
-			// TODO: Update this when you update to videoQueue
-			const updateVideoPlayer = (data) => { 
-				console.log("APPENDING VIDEO TO QUEUE: ", data.videoId, data.videoTitle)
-				appendVideoToQueue(data.videoId, data.videoTitle)
+			const updateVideoPlayer = (newQueue) => { 
+				setQueue(newQueue)
 			}
-			socket.on("youtube:receive_videoId", updateVideoPlayer)
+			socket.on("youtube:receive_queue", updateVideoPlayer)
         }     		
     }, [socket, socketConnected])
 
