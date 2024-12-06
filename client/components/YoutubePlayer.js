@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import YouTube from 'react-youtube'
 import { useSocket } from './socketProvider'
 
-const YoutubePlayer = ({ finalInput, videoTitle, roomId }) => {
+const YoutubePlayer = ({ finalInput, queue, roomId }) => {
     const { socket, socketConnected } = useSocket()
     const playerRef = useRef(null)
     const [isSeeking, setIsSeeking] = useState(false)

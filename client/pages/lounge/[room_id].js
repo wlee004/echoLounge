@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
+// const Deque = require("collections/deque")
+import Deque from "collections/deque"
 
 // React Components 
 import { useSocket } from '../../components/socketProvider'
@@ -13,15 +15,18 @@ const Room = () => {
     )
     const [roomId, setRoomId] = useState("")
     const [videoTitle, setVideoTitle] = useState("Temp")
-    const [queue, setQueue] = useState([])
+    const [queue, setQueue] = useState(new Deque())
     const { socket, socketConnected } = useSocket()
 
 	const updateSharedFinalInput = useCallback((newValue) => {
 		setFinalInput(newValue)
 	})
 
-	const updateSharedVideoTitle = useCallback((newValue) => { 
-		setVideoTitle(newValue)
+	const appendVideoToQueue = useCallback((newVideoId, newVideoTitle) => { 
+		const newVideo = {videoId: newVideoId, videoTitle: newVideoTitle}
+		const newQueue = queue.clone()
+		newQueue.push(newVideo)
+		setQueue(newQueue)
 	})
 
 	useEffect(() => { 
@@ -54,13 +59,13 @@ const Room = () => {
 			<div>
 				<SearchBar 
 					roomId={ roomId } 
-					updateSharedFinalInput={ updateSharedFinalInput } 
+					appendVideoToQueue={ appendVideoToQueue } 
 				/>
 			</div>
 			<div>
                 <YoutubePlayer 
 					finalInput={ finalInput }
-					videoTitle={ videoTitle }
+					queue={ queue }
 					roomId={ roomId }
 				/>
                 <VideoQueue queue={ queue }/>
