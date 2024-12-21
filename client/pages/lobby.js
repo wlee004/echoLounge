@@ -1,6 +1,7 @@
 import React, { useState } from 'react' 
 import { useRouter } from 'next/navigation'
 import { generateGuestUsername } from "../components/Username"
+import styles from '../styles/Lobby.module.css'
 
 const Lobby = () => {
     const router = useRouter()
@@ -22,9 +23,9 @@ const Lobby = () => {
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Lets Join A Room!</h1>
-            <form onSubmit={handleSubmit}>
+            <form className={styles.forms} onSubmit={handleSubmit}>
                 <div>
                     <label>
                     Username: 
@@ -35,6 +36,8 @@ const Lobby = () => {
                         onChange={(e) => setUsername(e.target.value)} 
                         placeholder="Enter your username"
                     />
+                </div>
+                <div>
                     <label>
                     RoomId: 
                     </label>
@@ -46,7 +49,9 @@ const Lobby = () => {
                         required
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <div>
+                    <button className={styles.button} type="submit">Submit</button>
+                </div>
             </form>
         </div>
     )

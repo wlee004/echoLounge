@@ -1,0 +1,43 @@
+.container{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column;
+    
+    height: 100vh; 
+    font-family: cursive;
+    background-color: black;
+    background-size: cover;
+    background-position: center;
+    /* padding-top: 300px;
+    padding-bottom: 300px; */
+    gap: 10px;
+
+    color: #fcfcfc;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow:
+      0 0 7px #873dfd,
+      0 0 10px #873dfd,
+      0 0 21px #6610f2,
+      0 0 42px #007bff,
+      0 0 82px #007bff,
+      0 0 92px #007bff,
+      0 0 102px #007bff,
+      0 0 151px #007bff;
+}
+
+.forms{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column;
+    gap: 10px;
+}
+
+.button {
+    background: linear-gradient(to right, #007bff, #6610f2);
+    border: none;
+    border-radius: 12px;
+    color: #689ac4;
+    font-family: 'Courier New', Courier, monospace; 
+}
