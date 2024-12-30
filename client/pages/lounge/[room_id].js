@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
-// const Deque = require("collections/deque")
 import Deque from "collections/deque"
+import logoStyles from "../../styles/Logo.module.css"
 
 // React Components 
 import { useSocket } from '../../components/socketProvider'
@@ -41,9 +41,14 @@ const Room = () => {
 	return (
 		<div>
 			<header>
-				<nav className= "navbar bg-body-tertiary" data-bs-theme="dark">
+				<nav className= "navbar" style={{"background-color": "blue"}}>
 					<div className="container-fluid">
-						<span className="navbar-brand mb-0 h1">Echo Lounge</span>
+						<h1 className={`${logoStyles.font}`}>
+							<svg xmlns="http://www.w3.org/2000/svg" width="5%" height="5%" fill="currentColor" className="bi bi-collection-play-fill m-3" viewBox="0 0 16 16">
+								<path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm6.258-6.437a.5.5 0 0 1 .507.013l4 2.5a.5.5 0 0 1 0 .848l-4 2.5A.5.5 0 0 1 6 12V7a.5.5 0 0 1 .258-.437"/>
+							</svg>
+							ECHO LOUNGE
+						</h1>
 					</div>
 				</nav>
 			</header>
