@@ -41,7 +41,7 @@ const Room = () => {
 	return (
 		<div>
 			<header>
-				<nav className= "navbar" style={{"background-color": "blue"}}>
+				<nav className= "navbar" style={{"backgroundColor": "blue"}}>
 					<div className="container-fluid">
 						<h1 className={`${logoStyles.font}`}>
 							<svg xmlns="http://www.w3.org/2000/svg" width="5%" height="5%" fill="currentColor" className="bi bi-collection-play-fill m-3" viewBox="0 0 16 16">
