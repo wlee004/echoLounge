@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;700&display=swap');
+
+/*
+    <uniquifier>: Use a unique and descriptive class name
+    <weight>: Use a value from 100 to 900
+*/
+.font {
+    font-family: "Funnel Display", serif;
+    font-weight: 800;
+    font-style: normal; 
+    color: white;
+}
