@@ -106,8 +106,8 @@ const YoutubePlayer = ({ queue, roomId }) => {
     }
 
     const opts = {
-        height: '390',
-        width: '640',
+        height: "500",
+        width: '100%',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
@@ -115,7 +115,7 @@ const YoutubePlayer = ({ queue, roomId }) => {
     }
     
     return (
-        <div>
+        <div style={{height: "100vh"}}>
             <YouTube 
                 videoId={ currentVideoId } 
                 // videoId={ queue[0].videoId } 

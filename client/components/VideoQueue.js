@@ -5,7 +5,7 @@ const VideoQueue = (props) => {
     return(
         <div>
             <h2>Queue</h2>
-            <ul>
+            <ul className="list-group">
                 {props.queue.map((videoData, index) => {
                     /**
                      * Schema for videoData
@@ -14,7 +14,7 @@ const VideoQueue = (props) => {
                      *    videoTitle: string
                      *  }
                      */
-                    return <li key={index}> videoTitle: {videoData.videoTitle} </li>
+                    return <li className="list-group-item" key={index}> {videoData.videoTitle} </li>
                 })}
             </ul>
         </div>

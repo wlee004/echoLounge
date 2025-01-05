@@ -52,20 +52,36 @@ const Room = () => {
 					</div>
 				</nav>
 			</header>
-			<div>
-				<SearchBar 
-					roomId={ roomId } 
-					appendVideoToQueue={ appendVideoToQueue } 
-				/>
+
+			<div className="container">
+
+				<div className="row p-3">
+					<div className="col-md-3"/>
+					<div className="col-md-6 ">
+						<SearchBar 
+							roomId={ roomId } 
+							appendVideoToQueue={ appendVideoToQueue } 
+						/>
+					</div>
+					<div className="col-md-3"/>
+				</div>
+
+				<div className="row" style={{height: "100vh"}}>
+					<div className="col-lg-2">
+						<VideoQueue queue={ queue }/>
+					</div>
+					<div className="col-lg-8">
+						<YoutubePlayer 
+							queue={ queue }
+							roomId={ roomId }
+						/>
+					</div>
+					<div className="col-lg-2">
+						<Chat roomId={ roomId }/>
+					</div>
+				</div>
 			</div>
-			<div>
-                <YoutubePlayer 
-					queue={ queue }
-					roomId={ roomId }
-				/>
-                <VideoQueue queue={ queue }/>
-                <Chat roomId={ roomId }/>
-            </div>
+
 		</div>
 	)
 }
