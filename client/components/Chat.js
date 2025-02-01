@@ -39,8 +39,9 @@ const Chat = (props) => {
         <div>
             <div className="messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
                 <ul className="list-group">
+                    <h2>ROOM CHAT</h2>
                     {
-                        <h1>{username}</h1>
+                        <h5>{username}</h5>
                     }
                     {messageLogs.map((msg, index) => {
                         return <li key={index} className="list-group-item message mb-2 p-2 bg-light rounded-3">{msg}</li>
@@ -49,16 +50,16 @@ const Chat = (props) => {
             </div>
 
             <form onSubmit={sendMessage} className="d-flex mb-3">
-                    <input
-                        type="text"
-                        className="form-control me-2"
-                        placeholder="Send Message"
-                        value={message}
-                        onChange={ (event) => setMessage(event.target.value) }
-                    />
-                    <button type="submit" className="btn btn-primary">
-                        Send
-                    </button>
+                <input
+                    type="text"
+                    className="form-control me-2"
+                    placeholder="Send Message"
+                    value={message}
+                    onChange={ (event) => setMessage(event.target.value) }
+                />
+                <button type="submit" className="btn btn-primary">
+                    Send
+                </button>
             </form>
         </div>
     )
