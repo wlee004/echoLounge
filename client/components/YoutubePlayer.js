@@ -25,10 +25,6 @@ const YoutubePlayer = ({ queue, roomId }) => {
         if (queueIndex === -1 && queue.length !== 0) { 
             queueNextSong()
         }
-        /**
-         * TODO: Have Else statement that check if current video is at the end, 
-         * TODO: if so go to next song
-         */
     }, [queue])
     
     useEffect(() => { 
@@ -106,8 +102,8 @@ const YoutubePlayer = ({ queue, roomId }) => {
     }
 
     const opts = {
-        height: '390',
-        width: '640',
+        height: "800vh",
+        width: '100%',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
@@ -115,7 +111,7 @@ const YoutubePlayer = ({ queue, roomId }) => {
     }
     
     return (
-        <div>
+        <div style={{height: "100vh"}}>
             <YouTube 
                 videoId={ currentVideoId } 
                 // videoId={ queue[0].videoId } 

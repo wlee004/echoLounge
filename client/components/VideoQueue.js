@@ -4,19 +4,21 @@ const VideoQueue = (props) => {
 
     return(
         <div>
-            <h2>Queue</h2>
-            <ul>
-                {props.queue.map((videoData, index) => {
-                    /**
-                     * Schema for videoData
-                     *  {
-                     *    videoId: string 
-                     *    videoTitle: string
-                     *  }
-                     */
-                    return <li key={index}> videoTitle: {videoData.videoTitle} </li>
-                })}
-            </ul>
+            <div className="mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3">
+                <h2>VIDEO QUEUE</h2>
+                <ul className="list-group">
+                    {props.queue.map((videoData, index) => {
+                        /**
+                         * Schema for videoData
+                         *  {
+                         *    videoId: string 
+                         *    videoTitle: string
+                         *  }
+                         */
+                        return <li className="list-group-item" key={index}> {videoData.videoTitle} </li>
+                    })}
+                </ul>
+            </div>
         </div>
     )
 }

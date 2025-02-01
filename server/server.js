@@ -8,7 +8,7 @@ const session = require("express-session")
 // Express Server
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your React app's URL
+    origin: 'http://localhost:3000', // React app's URL
     credentials: true               // Allow credentials (cookies)
 }))
 app.use(session({ 
