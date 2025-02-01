@@ -39,7 +39,7 @@ const Room = () => {
     }, [socket, socketConnected])
 
 	return (
-		<div>
+		<div style={{"overflow-y": "hidden"}}>
 			<header>
 				<nav className= "navbar" style={{"backgroundColor": "blue"}}>
 					<div className="container-fluid">
@@ -53,7 +53,7 @@ const Room = () => {
 				</nav>
 			</header>
 
-			<div className="container">
+			<div className="container-fluid">
 
 				<div className="row p-3">
 					<div className="col-md-3"/>
