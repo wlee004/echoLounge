@@ -5,7 +5,7 @@
     flex-direction: column;
     
     height: 100vh; 
-    font-family: cursive;
+    /* font-family: cursive; */
     background-color: #222831;
     background-size: cover;
     background-position: center;
@@ -14,7 +14,7 @@
     gap: 10px;
 
     color: #fcfcfc;
-    font-family: 'Courier New', Courier, monospace;
+    /* font-family: 'Courier New', Courier, monospace; */
     /* text-shadow:
       0 0 7px #873dfd,
       0 0 10px #873dfd,
@@ -32,10 +32,10 @@
     justify-content: center;
     align-items: center;
     width: 40%;
-    height: 70%;
+    height: 50%;
     min-width: 20%;
     background-color: #393E46;
-    border-radius: 5%;
+    border-radius: 3%;
     box-shadow: 10px 20px 20px 0 rgba(0, 0, 0, 0.4), -10px 20px 20px 0 rgba(0, 0, 0, 0.4), 0 -2px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -48,10 +48,10 @@
     gap: 10px;
 }
 
-.button {
+/* .button {
     background: linear-gradient(to right, #007bff, #6610f2);
     border: none;
     border-radius: 12px;
     color: #EEEEEE;
     font-family: 'Courier New', Courier, monospace; 
-}
+} */
