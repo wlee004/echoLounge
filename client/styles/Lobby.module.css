@@ -5,8 +5,8 @@
     flex-direction: column;
     
     height: 100vh; 
-    font-family: cursive;
-    backgroundColor: black;
+    /* font-family: cursive; */
+    background-color: #222831;
     background-size: cover;
     background-position: center;
     /* padding-top: 300px;
@@ -14,8 +14,8 @@
     gap: 10px;
 
     color: #fcfcfc;
-    font-family: 'Courier New', Courier, monospace;
-    text-shadow:
+    /* font-family: 'Courier New', Courier, monospace; */
+    /* text-shadow:
       0 0 7px #873dfd,
       0 0 10px #873dfd,
       0 0 21px #6610f2,
@@ -23,8 +23,22 @@
       0 0 82px #007bff,
       0 0 92px #007bff,
       0 0 102px #007bff,
-      0 0 151px #007bff;
+      0 0 151px #007bff; */
 }
+
+.lobbyform{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 50%;
+    min-width: 20%;
+    background-color: #393E46;
+    border-radius: 3%;
+    box-shadow: 10px 20px 20px 0 rgba(0, 0, 0, 0.4), -10px 20px 20px 0 rgba(0, 0, 0, 0.4), 0 -2px 20px 0 rgba(0, 0, 0, 0.5);
+}
+
 
 .forms{
     display: flex;
@@ -34,10 +48,10 @@
     gap: 10px;
 }
 
-.button {
+/* .button {
     background: linear-gradient(to right, #007bff, #6610f2);
     border: none;
     border-radius: 12px;
-    color: #689ac4;
+    color: #EEEEEE;
     font-family: 'Courier New', Courier, monospace; 
-}
+} */
