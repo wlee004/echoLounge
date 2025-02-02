@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useSocket } from "./socketProvider.js"
 import axios from "axios"
+import InputStyles from "../styles/Input.module.css"
 
 const SearchBar = ({roomId, appendVideoToQueue}) => {
     const [searchInput, setSearchInput] = useState("")
@@ -47,8 +48,8 @@ const SearchBar = ({roomId, appendVideoToQueue}) => {
             <form onSubmit={handleSubmit} className="d-flex mb-3">
                 <input
                     type="text"
-                    className="form-control me-2"
-                    placeholder="Search"
+                    className={`form-control me-2 ${InputStyles.input_color}`}
+                    placeholder="Input Youtube link or search"
                     value={searchInput}
                     onChange={ (event) => setSearchInput(event.target.value) }
                 />
