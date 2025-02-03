@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSocket } from "./socketProvider"
 import { generateGuestUsername } from "./Username"
 import logoStyles from "../styles/Logo.module.css"
@@ -10,6 +10,16 @@ const Chat = (props) => {
     const [messageLogs, setMessageLogs] = useState([])
     const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
+    const messageLogsRef = useRef(null)
+
+    // Scroll to the bottom whenever there's an update to message logs
+    useEffect(() => { 
+        console.log("Scrolling here")
+        const logs = messageLogsRef.current
+        if (logs) { 
+            logs.scrollTop = logs.scrollHeight // Scroll to the bottom
+        }
+    }, [messageLogs])
 
     useEffect(() => { 
         // Generate Username if one doesn't exists yet
@@ -45,9 +55,9 @@ const Chat = (props) => {
                 {
                     <h5>{username}</h5>
                 }
-                <ul className="list-group overflow-y-auto pt-3">
+                <ul className="list-group overflow-y-auto pt-3" ref={messageLogsRef}>
                     {messageLogs.map((msg, index) => {
-                        return <li key={index} className={`list-group-item mb-2 p-0 rounded-3 ${ListStyles.list_bg_color} d-inline-block`}>{msg}</li>
+                        return <li key={index} className={`list-group-item d-inline-block mb-2 p-0 rounded-3 ${ListStyles.list_bg_color}`}>{msg}</li>
                     })}
                 </ul>
                 
