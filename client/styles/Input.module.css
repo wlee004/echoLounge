@@ -1,0 +1,16 @@
+.input_color {
+    background-color: #222831;  
+    border-color: #393E46;      
+    color: #EEEEEE;             
+}
+
+.input_color::placeholder { 
+    color: #EEEEEE;
+}
+  
+.input_color:focus {
+    background-color: #222831;  
+    border-color: #00ADB5;     
+    box-shadow: 0 0 0 0.05rem #00ADB5;
+    color: #EEEEEE;
+}
