@@ -63,7 +63,7 @@ const Chat = (props) => {
                 <button type="submit" className="btn btn-primary">
                     Send
                 </button>
-`            </form>
+            </form>
         </div>
     )
 }
