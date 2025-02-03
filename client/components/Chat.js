@@ -39,31 +39,32 @@ const Chat = (props) => {
     }
 
     return (
-        <div>
-            <div className={`messages mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`}>
-                <ul className="list-group">
-                    <h2>Room Chat</h2>
-                    {
-                        <h5>{username}</h5>
-                    }
+        <div style={{"display": "flex", "height": "60vh", "flexDirection": "column"}}>
+            <div className={`d-flex flex-column messages mb-3 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`}>
+                <h2>Room Chat</h2>
+                {
+                    <h5>{username}</h5>
+                }
+                <ul className="list-group overflow-y-auto pt-3">
                     {messageLogs.map((msg, index) => {
-                        return <li key={index} className={`list-group-item message mb-2 p-2 bg-light rounded-3 ${ListStyles.list_bg_color}`}>{msg}</li>
+                        return <li key={index} className={`list-group-item message mb-2 p-2 rounded-3 ${ListStyles.list_bg_color} d-inline-block`}>{msg}</li>
                     })}
                 </ul>
+                
+                <form onSubmit={sendMessage} className="d-flex mb-3 mt-auto pt-3">
+                    <input
+                        type="text"
+                        className={`form-control me-2 ${InputStyles.input_color}`}
+                        placeholder="Send Message"
+                        value={message}
+                        onChange={ (event) => setMessage(event.target.value) }
+                    />
+                    <button type="submit" className="btn btn-primary">
+                        Send
+                    </button>
+                </form>
             </div>
 
-            <form onSubmit={sendMessage} className="d-flex mb-3">
-                <input
-                    type="text"
-                    className={`form-control me-2 ${InputStyles.input_color}`}
-                    placeholder="Send Message"
-                    value={message}
-                    onChange={ (event) => setMessage(event.target.value) }
-                />
-                <button type="submit" className="btn btn-primary">
-                    Send
-                </button>
-            </form>
         </div>
     )
 }
