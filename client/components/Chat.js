@@ -7,7 +7,7 @@ import ListStyles from "../styles/List.module.css"
 
 const Chat = (props) => {
     const [message, setMessage] = useState("")
-    const [messageLogs, setMessageLogs] = useState([])
+    const [messageLogs, setMessageLogs] = useState([]) // messageLogs are of {senderUsername: "", message: ""}
     const [username, setUsername] = useState("")
     const { socket, socketConnected } = useSocket()
     const messageLogsRef = useRef(null)
@@ -34,16 +34,13 @@ const Chat = (props) => {
             }
             socket.on("chat:receive_message", appendMessageLogs)
         }
-        // return () => {
-        //     socket.off("chat:receive_message", appendMessageLogs)
-        // }
     }, [socket, socketConnected])
 
     const sendMessage = async (event) => {
         event.preventDefault()
         if (message !== "") { 
-            setMessageLogs((previousMessages) => [...previousMessages, message]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
-            socket.emit("chat:send_message", {message, "roomId": props.roomId} )
+            setMessageLogs((previousMessages) => [...previousMessages, {"senderUsername": username, message}]) // TODO: Maybe remove this line depending on how we want to handle emit in backend
+            socket.emit("chat:send_message", {"senderUsername": username, message, "roomId": props.roomId})
             setMessage("")
         }
     }
@@ -57,7 +54,10 @@ const Chat = (props) => {
                 }
                 <ul className="list-group overflow-y-auto pt-3" ref={messageLogsRef}>
                     {messageLogs.map((msg, index) => {
-                        return <li key={index} className={`list-group-item d-inline-block mb-2 p-0 rounded-3 ${ListStyles.list_bg_color}`}>{msg}</li>
+                        return (<li key={index} 
+                                    className={`list-group-item d-inline-block mb-2 p-0 rounded-3 ${ListStyles.list_bg_color}`}>
+                                        {msg.senderUsername}: {msg.message}
+                                </li>)
                     })}
                 </ul>
                 
