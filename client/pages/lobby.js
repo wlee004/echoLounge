@@ -38,7 +38,6 @@ const Lobby = () => {
                 </nav>
             </header>
 
-            
              <div className={styles.container}>
                 <div className={styles.lobbyform} onSubmit={handleSubmit}>
                     <div className='col-8'>

@@ -39,7 +39,7 @@ const Room = () => {
     }, [socket, socketConnected])
 
 	return (
-		<div style={{"overflow-y": "hidden"}}>
+		<div>
 			<header>
 				<nav className={`${logoStyles.navbar_bg_color} navbar`}>
 					<div className="container-fluid">
@@ -54,9 +54,8 @@ const Room = () => {
 			</header>
 
 			<div className="container-fluid">
-
 				<div className="row pt-3">
-					<div className="col-10 mx-auto">
+					<div className="col-3 mx-auto">
 						<SearchBar 
 							roomId={ roomId } 
 							appendVideoToQueue={ appendVideoToQueue } 
@@ -79,7 +78,6 @@ const Room = () => {
 					</div>
 				</div>
 			</div>
-
 		</div>
 	)
 }
