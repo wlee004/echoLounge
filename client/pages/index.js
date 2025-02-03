@@ -33,9 +33,9 @@ export default function Home() {
             <div className="row pt-5">
 
                 <div className="col-md-6">
-                    <div className="pt-5">
-                        <h1 className="pt-3">Stream, watch, and chat with friends</h1>
-                        <p className="pt-5">
+                    <div className="mr-5 pt-5">
+                        <h1 className="pt-5" style={{"font-size": "325%"}}>Stream, watch, and chat with friends</h1>
+                        <p className="pt-4" style={{"font-size": "125%"}}>
                             Echo Lounge is the place to watch, share, and vibe with friends to your favorite YouTube videos—from music, comedy, learning, and much more the fun never ends! 
                         </p>
                         <div className="pt-3">

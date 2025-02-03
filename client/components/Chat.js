@@ -50,7 +50,7 @@ const Chat = (props) => {
 
     return (
         <div>
-            <div className={`d-flex flex-column messages mb-3 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`} style={{"height": "800px"}}>
+            <div className={`d-flex flex-column messages w-100 p-2 pb-0 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`} style={{"height": "800px"}}>
                 <h2>Room Chat</h2>
                 {
                     <h5>{username}</h5>
