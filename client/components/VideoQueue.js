@@ -6,9 +6,9 @@ const VideoQueue = (props) => {
 
     return(
         <div>
-            <div className={`mb-3 flex-grow-1 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`}>
+            <div className={`d-flex flex-column mb-3 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`} style={{"height": "800px"}}>
                 <h2>Video Queue</h2>
-                <ul className="list-group">
+                <ul className="list-group overflow-y-auto pt-3">
                     {props.queue.map((videoData, index) => {
                         /**
                          * Schema for videoData
@@ -17,7 +17,7 @@ const VideoQueue = (props) => {
                          *    videoTitle: string
                          *  }
                          */
-                        return <li className={`list-group-item ${ListStyles.list_bg_color}`} key={index} styles={{"word-wrap": "break-word", "max-width": "50%",  "overflow-wrap": "break-word"}}> {videoData.videoTitle} </li>
+                        return <li className={`list-group-item p-1 ${ListStyles.list_bg_color}`} key={index}> {videoData.videoTitle} </li>
                     })}
                 </ul>
             </div>
