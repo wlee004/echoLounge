@@ -1,4 +1,6 @@
 .list_bg_color { 
-    /* background-color: #EEEEEE; */
     background-color: #393E46;
+    border-color: #393E46;
+    color: #EEEEEE;
+    padding: 100px 105px;
 }

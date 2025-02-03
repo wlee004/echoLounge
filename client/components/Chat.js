@@ -39,15 +39,15 @@ const Chat = (props) => {
     }
 
     return (
-        <div style={{"display": "flex", "height": "60vh", "flexDirection": "column"}}>
-            <div className={`d-flex flex-column messages mb-3 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`}>
+        <div>
+            <div className={`d-flex flex-column messages mb-3 w-100 p-2 border border-1 rounded-3 ${logoStyles.navbar_bg_color}`} style={{"height": "800px"}}>
                 <h2>Room Chat</h2>
                 {
                     <h5>{username}</h5>
                 }
                 <ul className="list-group overflow-y-auto pt-3">
                     {messageLogs.map((msg, index) => {
-                        return <li key={index} className={`list-group-item message mb-2 p-2 rounded-3 ${ListStyles.list_bg_color} d-inline-block`}>{msg}</li>
+                        return <li key={index} className={`list-group-item mb-2 p-0 rounded-3 ${ListStyles.list_bg_color} d-inline-block`}>{msg}</li>
                     })}
                 </ul>
                 
